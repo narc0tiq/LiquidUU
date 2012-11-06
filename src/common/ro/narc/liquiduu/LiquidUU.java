@@ -7,6 +7,12 @@ import cpw.mods.fml.common.network.NetworkMod;
 
 import net.minecraft.src.Item;
 
+import buildcraft.api.liquids.LiquidData;
+import buildcraft.api.liquids.LiquidManager;
+import buildcraft.api.liquids.LiquidStack;
+
+import ic2.common.Ic2Items;
+
 @Mod(
         modid="LiquidUU",
         useMetadata=true,
@@ -30,6 +36,13 @@ public class LiquidUU {
         liquidUU.setTextureFile("/liquiduu.png");
 
         proxy.init(liquidUU);
+
+        LiquidStack liquidUUStack = new LiquidStack(liquidUU, 1000);
+
+        LiquidData liquidUUData = new LiquidData(liquidUUStack, Ic2Items.matter,
+                Ic2Items.cell);
+
+        LiquidManager.liquids.add(liquidUUData);
     }
 
 }
