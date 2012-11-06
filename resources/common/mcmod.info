@@ -2,14 +2,14 @@
 {
   "modid": "LiquidUU",
   "name": "Liquid UU-Matter",
-  "description": "It makes bubblegum a buildcraft liquid. What did you expect?",
-  "version": "0.1",
+  "description": "It makes UU-Matter a buildcraft liquid. Liquid UU can duplicate some liquids in the refinery, or you can take it back out again using some empty cells.",
+  "version": "0.5",
   "mcversion": "1.3.2",
   "logoFile": "",
   "url": "",
   "updateUrl": "",
   "authors": ["Narc", "FunnyMan3595"],
-  "credits": "With many thanks to FunnyMan3595 for getting this off the ground.",
+  "credits": "Thanks to BeardlessBrady for the idea, and many thanks to FunnyMan3595 for getting this off the ground.",
   "parent": "",
   "screenshots": [],
   "dependencies": ["IC2", "Buildcraft|Transport", "Buildcraft|Energy"]
