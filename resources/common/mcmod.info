@@ -12,6 +12,6 @@
   "credits": "With many thanks to FunnyMan3595 for getting this off the ground.",
   "parent": "",
   "screenshots": [],
-  "dependencies": ["IC2", "Buildcraft|Transport"]
+  "dependencies": ["IC2", "Buildcraft|Transport", "Buildcraft|Energy"]
 }
 ]
