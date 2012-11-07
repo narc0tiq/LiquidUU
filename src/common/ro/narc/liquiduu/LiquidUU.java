@@ -4,6 +4,7 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 
 import net.minecraft.src.Block;
@@ -24,7 +25,7 @@ import ic2.common.Ic2Items;
         modid="LiquidUU",
         version="0.6",
         useMetadata=true,
-        dependencies="required-after:IC2;required-after:BuildCraft|Transport; required-after:BuildCraft|Energy"
+        dependencies="required-after:IC2;required-after:BuildCraft|Transport;required-after:BuildCraft|Energy; after:Forestry"
     )
 @NetworkMod(
         clientSideRequired=true
@@ -64,15 +65,20 @@ public class LiquidUU {
         initRefineryRecipes();
     }
 
+    @Mod.PostInit
+    public static void init(FMLPostInitializationEvent event) {
+        loadIntegration("Forestry");
+    }
+
     @SuppressWarnings("unchecked")
-    public static void initLiquidData() {
+    private static void initLiquidData() {
         LiquidStack liquidUUStack = new LiquidStack(liquidUU, 1000);
         LiquidData liquidUUData = new LiquidData(liquidUUStack, Ic2Items.matter,
                 Ic2Items.cell);
         LiquidManager.liquids.add(liquidUUData);
     }
 
-    public static void initRefineryRecipes() {
+    private static void initRefineryRecipes() {
         RefineryRecipe.registerRefineryRecipe(
             new RefineryRecipe(
                 new LiquidStack(liquidUU, 1),
@@ -97,5 +103,19 @@ public class LiquidUU {
                 5, 1
             )
         );
+    }
+
+    @SuppressWarnings("unchecked")
+    private static boolean loadIntegration(String name) {
+        System.out.println("LiquidUU: Attempting to load " + name + " integration...");
+
+        try {
+            Class t = LiquidUU.class.getClassLoader().loadClass("ro.narc.liquiduu.integration." + name);
+            return ((Boolean)t.getMethod("init", new Class[0]).invoke((Object)null, new Object[0])).booleanValue();
+        }
+        catch (Throwable e) {
+            System.out.println("LiquidUU: Did not load " + name + " integration: " + e);
+            return false;
+        }
     }
 }
