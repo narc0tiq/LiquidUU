@@ -2,11 +2,15 @@ package ro.narc.liquiduu;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.Item;
+
+import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.Property;
 
 import buildcraft.api.liquids.LiquidData;
 import buildcraft.api.liquids.LiquidManager;
@@ -28,13 +32,28 @@ import ic2.common.Ic2Items;
 public class LiquidUU {
     public static Item liquidUU;
 
+    public static Configuration config;
+
     @SidedProxy(clientSide = "ro.narc.liquiduu.ClientProxy", serverSide = "ro.narc.liquiduu.CommonProxy")
     public static CommonProxy proxy;
+
+    @Mod.PreInit
+    public static void preInit(FMLPreInitializationEvent event) {
+        config = new Configuration(event.getSuggestedConfigurationFile());
+    }
 
     @Mod.Init
     public static void init(FMLInitializationEvent event) {
 
-        liquidUU = new ItemGeneric(21001);
+        try {
+            config.load();
+        }
+        catch (RuntimeException e) { /* and ignore it */ }
+
+        Property liquidItemID = config.getItem("liquid.uu", 21001);
+        config.save();
+
+        liquidUU = new ItemGeneric(liquidItemID.getInt(21001));
         liquidUU.setItemName("LiquidUU");
         liquidUU.setIconIndex(0);
         liquidUU.setTextureFile("/liquiduu.png");
