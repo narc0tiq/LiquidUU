@@ -32,6 +32,7 @@ import ic2.common.Ic2Items;
     )
 public class LiquidUU {
     public static Item liquidUU;
+    public static LiquidStack liquidUUStack;
 
     public static Configuration config;
 
@@ -72,7 +73,7 @@ public class LiquidUU {
 
     @SuppressWarnings("unchecked")
     private static void initLiquidData() {
-        LiquidStack liquidUUStack = new LiquidStack(liquidUU, 1000);
+        liquidUUStack = new LiquidStack(liquidUU, 1000);
         LiquidData liquidUUData = new LiquidData(liquidUUStack, Ic2Items.matter,
                 Ic2Items.cell);
         LiquidManager.liquids.add(liquidUUData);
@@ -107,7 +108,7 @@ public class LiquidUU {
 
     @SuppressWarnings("unchecked")
     private static boolean loadIntegration(String name) {
-        System.out.println("LiquidUU: Attempting to load " + name + " integration...");
+        System.out.println("LiquidUU: Loading " + name + " integration...");
 
         try {
             Class t = LiquidUU.class.getClassLoader().loadClass("ro.narc.liquiduu.integration." + name);
