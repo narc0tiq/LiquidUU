@@ -22,7 +22,7 @@ import ic2.common.Ic2Items;
 
 @Mod(
         modid="LiquidUU",
-        version="0.5",
+        version="0.6",
         useMetadata=true,
         dependencies="required-after:IC2;required-after:BuildCraft|Transport; required-after:BuildCraft|Energy"
     )
@@ -60,14 +60,42 @@ public class LiquidUU {
 
         proxy.init(liquidUU);
 
+        initLiquidData();
+        initRefineryRecipes();
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void initLiquidData() {
         LiquidStack liquidUUStack = new LiquidStack(liquidUU, 1000);
         LiquidData liquidUUData = new LiquidData(liquidUUStack, Ic2Items.matter,
                 Ic2Items.cell);
         LiquidManager.liquids.add(liquidUUData);
-
-        RefineryRecipe.registerRefineryRecipe(new RefineryRecipe(new LiquidStack(liquidUU, 1), new LiquidStack(Block.waterStill.blockID, 1), new LiquidStack(Block.waterStill.blockID, 10), 5, 1));
-        RefineryRecipe.registerRefineryRecipe(new RefineryRecipe(new LiquidStack(liquidUU, 1), new LiquidStack(Block.lavaStill.blockID, 1), new LiquidStack(Block.lavaStill.blockID, 5), 5, 1));
-        RefineryRecipe.registerRefineryRecipe(new RefineryRecipe(new LiquidStack(liquidUU, 2), new LiquidStack(BuildCraftEnergy.fuel.shiftedIndex, 1), new LiquidStack(BuildCraftEnergy.fuel.shiftedIndex, 2), 5, 1));
     }
 
+    public static void initRefineryRecipes() {
+        RefineryRecipe.registerRefineryRecipe(
+            new RefineryRecipe(
+                new LiquidStack(liquidUU, 1),
+                new LiquidStack(Block.waterStill.blockID, 1),
+                new LiquidStack(Block.waterStill.blockID, 10),
+                5, 1
+            )
+        );
+        RefineryRecipe.registerRefineryRecipe(
+            new RefineryRecipe(
+                new LiquidStack(liquidUU, 1),
+                new LiquidStack(Block.lavaStill.blockID, 1),
+                new LiquidStack(Block.lavaStill.blockID, 5),
+                5, 1
+            )
+        );
+        RefineryRecipe.registerRefineryRecipe(
+            new RefineryRecipe(
+                new LiquidStack(liquidUU, 2),
+                new LiquidStack(BuildCraftEnergy.fuel.shiftedIndex, 1),
+                new LiquidStack(BuildCraftEnergy.fuel.shiftedIndex, 2),
+                5, 1
+            )
+        );
+    }
 }
