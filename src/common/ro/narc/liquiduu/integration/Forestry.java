@@ -20,11 +20,15 @@ public class Forestry {
 
         ItemStack canEmpty = ItemInterface.getItem("canEmpty");
         ItemStack canUU    = new ItemStack(LiquidUU.cannedUU);
+        ItemStack ingotTin = ItemInterface.getItem("ingotTin");
         Item liquidBiomass = ItemInterface.getItem("liquidBiomass").getItem();
         Item liquidBiofuel = ItemInterface.getItem("liquidBiofuel").getItem();
         Item liquidSeedOil = ItemInterface.getItem("liquidSeedOil").getItem();
         Item liquidJuice   = ItemInterface.getItem("liquidJuice").getItem();
         Item liquidHoney   = ItemInterface.getItem("liquidHoney").getItem();
+
+        RecipeManagers.squeezerManager.addRecipe(5, new ItemStack[]{Ic2Items.matter}, LiquidUU.liquidUUStack);
+        RecipeManagers.squeezerManager.addRecipe(5, new ItemStack[]{canUU}, LiquidUU.liquidUUStack, ingotTin, 5);
 
         RecipeManagers.bottlerManager.addRecipe(5, LiquidUU.liquidUUStack, Ic2Items.cell, Ic2Items.matter);
         RecipeManagers.bottlerManager.addRecipe(5, LiquidUU.liquidUUStack, canEmpty, canUU);
