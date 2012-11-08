@@ -32,6 +32,7 @@ import ic2.common.Ic2Items;
     )
 public class LiquidUU {
     public static Item liquidUU;
+    public static Item cannedUU;
     public static LiquidStack liquidUUStack;
 
     public static Configuration config;
@@ -53,14 +54,20 @@ public class LiquidUU {
         catch (RuntimeException e) { /* and ignore it */ }
 
         Property liquidItemID = config.getItem("liquid.uu", 21001);
+        Property cannedItemID = config.getItem("canned.uu", 21002);
         config.save();
 
         liquidUU = new ItemGeneric(liquidItemID.getInt(21001));
-        liquidUU.setItemName("LiquidUU");
+        liquidUU.setItemName("liquidUU");
         liquidUU.setIconIndex(0);
         liquidUU.setTextureFile("/liquiduu.png");
 
-        proxy.init(liquidUU);
+        cannedUU = new ItemGeneric(cannedItemID.getInt(21002));
+        cannedUU.setItemName("cannedUU");
+        cannedUU.setIconIndex(1);
+        cannedUU.setTextureFile("/liquiduu.png");
+
+        proxy.init();
 
         initLiquidData();
         initRefineryRecipes();
