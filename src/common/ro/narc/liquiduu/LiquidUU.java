@@ -105,6 +105,14 @@ public class LiquidUU {
         );
         RefineryRecipe.registerRefineryRecipe(
             new RefineryRecipe(
+                new LiquidStack(liquidUU, 1),
+                new LiquidStack(BuildCraftEnergy.oilStill.blockID, 1),
+                new LiquidStack(BuildCraftEnergy.oilStill.blockID, 2),
+                5, 1
+            )
+        );
+        RefineryRecipe.registerRefineryRecipe(
+            new RefineryRecipe(
                 new LiquidStack(liquidUU, 2),
                 new LiquidStack(BuildCraftEnergy.fuel.shiftedIndex, 1),
                 new LiquidStack(BuildCraftEnergy.fuel.shiftedIndex, 2),
