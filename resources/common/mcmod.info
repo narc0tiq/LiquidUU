@@ -3,7 +3,7 @@
   "modid": "LiquidUU",
   "name": "Liquid UU-Matter",
   "description": "It makes UU-Matter a buildcraft liquid. Liquid UU can duplicate some liquids in the refinery, or you can take it back out again using some empty cells.",
-  "version": "0.6",
+  "version": "0.7",
   "mcversion": "1.3.2",
   "logoFile": "",
   "url": "",

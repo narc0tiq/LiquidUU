@@ -1,14 +1,18 @@
 package ro.narc.liquiduu;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.Item;
+import net.minecraft.src.TileEntity;
 
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.Property;
@@ -23,7 +27,7 @@ import ic2.common.Ic2Items;
 
 @Mod(
         modid="LiquidUU",
-        version="0.6",
+        version="0.7",
         useMetadata=true,
         dependencies="required-after:IC2;required-after:BuildCraft|Transport;required-after:BuildCraft|Energy; after:Forestry"
     )
@@ -33,6 +37,7 @@ import ic2.common.Ic2Items;
 public class LiquidUU {
     public static Item liquidUU;
     public static Item cannedUU;
+    public static Block acceleratorBlock;
     public static LiquidStack liquidUUStack;
 
     public static Configuration config;
@@ -53,6 +58,7 @@ public class LiquidUU {
         }
         catch (RuntimeException e) { /* and ignore it */ }
 
+        Property accelBlockID = config.getBlock("accelerator", 1300);
         Property liquidItemID = config.getItem("liquid.uu", 21001);
         Property cannedItemID = config.getItem("canned.uu", 21002);
         config.save();
@@ -66,6 +72,10 @@ public class LiquidUU {
         cannedUU.setItemName("cannedUU");
         cannedUU.setIconIndex(1);
         cannedUU.setTextureFile("/liquiduu.png");
+
+        acceleratorBlock = new BlockGeneric(accelBlockID.getInt(1300));
+        GameRegistry.registerBlock(acceleratorBlock, ItemGenericBlock.class);
+        GameRegistry.registerTileEntity(TileEntityAccelerator.class, "Accelerator");
 
         proxy.init();
 
@@ -84,6 +94,10 @@ public class LiquidUU {
         LiquidData liquidUUData = new LiquidData(liquidUUStack, Ic2Items.matter,
                 Ic2Items.cell);
         LiquidManager.liquids.add(liquidUUData);
+    }
+
+    public static Side getSide() {
+        return FMLCommonHandler.instance().getEffectiveSide();
     }
 
     private static void initRefineryRecipes() {
