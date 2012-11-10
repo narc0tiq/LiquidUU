@@ -12,6 +12,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.Item;
+import net.minecraft.src.ItemStack;
 import net.minecraft.src.TileEntity;
 
 import net.minecraftforge.common.Configuration;
@@ -37,7 +38,8 @@ import ic2.common.Ic2Items;
 public class LiquidUU {
     public static Item liquidUU;
     public static Item cannedUU;
-    public static Block acceleratorBlock;
+    public static Block liquidUUBlock;
+    public static ItemStack accelerator;
     public static LiquidStack liquidUUStack;
 
     public static Configuration config;
@@ -73,9 +75,11 @@ public class LiquidUU {
         cannedUU.setIconIndex(1);
         cannedUU.setTextureFile("/liquiduu.png");
 
-        acceleratorBlock = new BlockGeneric(accelBlockID.getInt(1300));
-        GameRegistry.registerBlock(acceleratorBlock, ItemGenericBlock.class);
+        liquidUUBlock = new BlockGeneric(accelBlockID.getInt(1300));
+        GameRegistry.registerBlock(liquidUUBlock, ItemGenericBlock.class);
         GameRegistry.registerTileEntity(TileEntityAccelerator.class, "Accelerator");
+
+        accelerator = new ItemStack(liquidUUBlock, 1, BlockGeneric.DATA_ACCELERATOR);
 
         proxy.init();
 

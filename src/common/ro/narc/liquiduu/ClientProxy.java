@@ -14,7 +14,8 @@ public class ClientProxy extends CommonProxy {
 
         LanguageRegistry.addName(LiquidUU.liquidUU, "Liquid UU-Matter");
         LanguageRegistry.addName(LiquidUU.cannedUU, "UU-Matter Can");
-        LanguageRegistry.addName(LiquidUU.acceleratorBlock, "Accelerator");
+        LanguageRegistry.addName(LiquidUU.liquidUUBlock, "Uninitialized LiquidUU block");
+        LanguageRegistry.addName(LiquidUU.accelerator, "Accelerator");
 
         TextureLiquidsFX liquidUUFX = new TextureLiquidsFX(140, 210, 40, 80, 140, 210, 
                 LiquidUU.liquidUU.getIconFromDamage(0), 
