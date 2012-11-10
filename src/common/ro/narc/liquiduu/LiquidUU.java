@@ -23,6 +23,8 @@ import buildcraft.api.liquids.LiquidManager;
 import buildcraft.api.liquids.LiquidStack;
 import buildcraft.api.recipes.RefineryRecipe;
 import buildcraft.BuildCraftEnergy;
+import buildcraft.BuildCraftFactory;
+import buildcraft.BuildCraftTransport;
 
 import ic2.common.Ic2Items;
 
@@ -30,7 +32,7 @@ import ic2.common.Ic2Items;
         modid="LiquidUU",
         version="0.7",
         useMetadata=true,
-        dependencies="required-after:IC2;required-after:BuildCraft|Transport;required-after:BuildCraft|Energy; after:Forestry"
+        dependencies="required-after:IC2;required-after:BuildCraft|Transport;required-after:BuildCraft|Energy;required-after:BuildCraft|Factory;after:Forestry"
     )
 @NetworkMod(
         clientSideRequired=true
@@ -80,6 +82,28 @@ public class LiquidUU {
         GameRegistry.registerTileEntity(TileEntityAccelerator.class, "Accelerator");
 
         accelerator = new ItemStack(liquidUUBlock, 1, BlockGeneric.DATA_ACCELERATOR);
+
+        GameRegistry.addRecipe(accelerator, "TH", "SA", " w",
+                Character.valueOf('T'), BuildCraftFactory.tankBlock,
+                Character.valueOf('H'), BuildCraftFactory.hopperBlock,
+                Character.valueOf('S'), BuildCraftTransport.pipeLiquidsStone,
+                Character.valueOf('A'), Ic2Items.advancedCircuit,
+                Character.valueOf('w'), BuildCraftTransport.pipeItemsWood
+        );
+        GameRegistry.addRecipe(accelerator, " ST", "wAH",
+                Character.valueOf('T'), BuildCraftFactory.tankBlock,
+                Character.valueOf('H'), BuildCraftFactory.hopperBlock,
+                Character.valueOf('S'), BuildCraftTransport.pipeLiquidsStone,
+                Character.valueOf('A'), Ic2Items.advancedCircuit,
+                Character.valueOf('w'), BuildCraftTransport.pipeItemsWood
+        );
+        GameRegistry.addRecipe(accelerator, "wAH", " ST",
+                Character.valueOf('T'), BuildCraftFactory.tankBlock,
+                Character.valueOf('H'), BuildCraftFactory.hopperBlock,
+                Character.valueOf('S'), BuildCraftTransport.pipeLiquidsStone,
+                Character.valueOf('A'), Ic2Items.advancedCircuit,
+                Character.valueOf('w'), BuildCraftTransport.pipeItemsWood
+        );
 
         proxy.init();
 

@@ -12,6 +12,6 @@
   "credits": "Thanks to BeardlessBrady for the idea, and many thanks to FunnyMan3595 for getting this off the ground.",
   "parent": "",
   "screenshots": [],
-  "dependencies": ["IC2", "Buildcraft|Transport", "Buildcraft|Energy"]
+  "dependencies": ["IC2", "BuildCraft|Transport", "BuildCraft|Energy", "BuildCraft|Factory"]
 }
 ]
