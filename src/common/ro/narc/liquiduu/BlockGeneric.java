@@ -39,7 +39,8 @@ public class BlockGeneric extends BlockContainer {
         if(!(te instanceof TileEntityAccelerator)) {
             return false;
         }
-        ((TileEntityAccelerator) te).bitchAtMe();
+        // Nothing to do with the tileentity yet.
+
         return true;
     }
 }

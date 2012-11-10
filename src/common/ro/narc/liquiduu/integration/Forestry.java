@@ -21,11 +21,6 @@ public class Forestry {
         ItemStack canEmpty = ItemInterface.getItem("canEmpty");
         ItemStack canUU    = new ItemStack(LiquidUU.cannedUU);
         ItemStack ingotTin = ItemInterface.getItem("ingotTin");
-        Item liquidBiomass = ItemInterface.getItem("liquidBiomass").getItem();
-        Item liquidBiofuel = ItemInterface.getItem("liquidBiofuel").getItem();
-        Item liquidSeedOil = ItemInterface.getItem("liquidSeedOil").getItem();
-        Item liquidJuice   = ItemInterface.getItem("liquidJuice").getItem();
-        Item liquidHoney   = ItemInterface.getItem("liquidHoney").getItem();
 
         RecipeManagers.squeezerManager.addRecipe(5, new ItemStack[]{Ic2Items.matter}, LiquidUU.liquidUUStack);
         RecipeManagers.squeezerManager.addRecipe(5, new ItemStack[]{canUU}, LiquidUU.liquidUUStack, ingotTin, 5);
@@ -33,8 +28,24 @@ public class Forestry {
         RecipeManagers.bottlerManager.addRecipe(5, LiquidUU.liquidUUStack, Ic2Items.cell, Ic2Items.matter);
         RecipeManagers.bottlerManager.addRecipe(5, LiquidUU.liquidUUStack, canEmpty, canUU);
 
+        initBuildcraftLiquids(canUU, canEmpty);
+        initRefineryRecipes();
+
+        return true;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void initBuildcraftLiquids(ItemStack canUU, ItemStack canEmpty) {
         LiquidData cannedUUData = new LiquidData(LiquidUU.liquidUUStack, canUU, canEmpty);
         LiquidManager.liquids.add(cannedUUData);
+    }
+
+    public static void initRefineryRecipes() {
+        Item liquidBiomass = ItemInterface.getItem("liquidBiomass").getItem();
+        Item liquidBiofuel = ItemInterface.getItem("liquidBiofuel").getItem();
+        Item liquidSeedOil = ItemInterface.getItem("liquidSeedOil").getItem();
+        Item liquidJuice   = ItemInterface.getItem("liquidJuice").getItem();
+        Item liquidHoney   = ItemInterface.getItem("liquidHoney").getItem();
 
         RefineryRecipe.registerRefineryRecipe(
             new RefineryRecipe(
@@ -76,7 +87,5 @@ public class Forestry {
                 5, 1
             )
         );
-
-        return true;
     }
 }
