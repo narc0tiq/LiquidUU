@@ -15,7 +15,12 @@ public class ItemGenericBlock extends ItemBlock {
 
     public String getItemNameIS(ItemStack itemstack)
     {
-        // int damage = itemstack.getItemDamage();
-        return "tile.UUMAccelerator";
+        int damage = itemstack.getItemDamage();
+
+        if(damage == BlockGeneric.DATA_ACCELERATOR) {
+            return "tile.UUMAccelerator";
+        }
+
+        return "tile.UUMBlock";
     }
 }
