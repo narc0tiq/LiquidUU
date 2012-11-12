@@ -10,7 +10,7 @@ import net.minecraft.src.Item;
 
 public class ClientProxy extends CommonProxy {
     public void init() {
-        MinecraftForgeClient.preloadTexture("/liquiduu.png");
+        MinecraftForgeClient.preloadTexture("/liquiduu-gfx/items.png");
 
         LanguageRegistry.addName(LiquidUU.liquidUU, "Liquid UU-Matter");
         LanguageRegistry.addName(LiquidUU.cannedUU, "UU-Matter Can");

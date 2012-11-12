@@ -8,6 +8,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import net.minecraft.src.Block;
@@ -44,18 +45,21 @@ public class LiquidUU {
     public static ItemStack accelerator;
     public static LiquidStack liquidUUStack;
 
+    @Mod.Instance("LiquidUU")
+    public static LiquidUU instance;
+
     public static Configuration config;
 
     @SidedProxy(clientSide = "ro.narc.liquiduu.ClientProxy", serverSide = "ro.narc.liquiduu.CommonProxy")
     public static CommonProxy proxy;
 
     @Mod.PreInit
-    public static void preInit(FMLPreInitializationEvent event) {
+    public void preInit(FMLPreInitializationEvent event) {
         config = new Configuration(event.getSuggestedConfigurationFile());
     }
 
     @Mod.Init
-    public static void init(FMLInitializationEvent event) {
+    public void init(FMLInitializationEvent event) {
 
         try {
             config.load();
@@ -70,12 +74,12 @@ public class LiquidUU {
         liquidUU = new ItemGeneric(liquidItemID.getInt(21001));
         liquidUU.setItemName("liquidUU");
         liquidUU.setIconIndex(0);
-        liquidUU.setTextureFile("/liquiduu.png");
+        liquidUU.setTextureFile("/liquiduu-gfx/items.png");
 
         cannedUU = new ItemGeneric(cannedItemID.getInt(21002));
         cannedUU.setItemName("cannedUU");
         cannedUU.setIconIndex(1);
-        cannedUU.setTextureFile("/liquiduu.png");
+        cannedUU.setTextureFile("/liquiduu-gfx/items.png");
 
         liquidUUBlock = new BlockGeneric(accelBlockID.getInt(1300));
         GameRegistry.registerBlock(liquidUUBlock, ItemGenericBlock.class);
@@ -109,10 +113,12 @@ public class LiquidUU {
 
         initLiquidData();
         initRefineryRecipes();
+
+        NetworkRegistry.instance().registerGuiHandler(this, new LiquidUUGUIHandler());
     }
 
     @Mod.PostInit
-    public static void init(FMLPostInitializationEvent event) {
+    public void init(FMLPostInitializationEvent event) {
         loadIntegration("Forestry");
     }
 
