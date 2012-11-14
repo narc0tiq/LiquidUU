@@ -142,6 +142,16 @@ public class TileEntityAccelerator extends TileEntityMachine implements IWrencha
         return null;
     }
 
+    public int getOperationCost() {
+        InstantRecipe recipe = getActiveRecipe();
+
+        if(recipe == null) {
+            return 0;
+        }
+
+        return recipe.uuCost;
+    }
+
     public void consumeUU(int amount) {
         uu -= amount;
     }
