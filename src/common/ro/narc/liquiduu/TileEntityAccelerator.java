@@ -74,6 +74,10 @@ public class TileEntityAccelerator extends TileEntityMachine implements IWrencha
 
     public ItemStack getConnectedMachineItem() {
         TileEntity te = getConnectedMachine();
+        if(te == null) {
+            return null;
+        }
+
         int machineId = worldObj.getBlockId(te.xCoord, te.yCoord, te.zCoord);
         Block machineBlock = Block.blocksList[machineId];
 
@@ -82,6 +86,10 @@ public class TileEntityAccelerator extends TileEntityMachine implements IWrencha
 
     public InstantRecipe getActiveRecipe() {
         TileEntity te = getConnectedMachine();
+
+        if(te == null) {
+            return null;
+        }
 
         InstantRecipe recipe = null;
 
@@ -98,6 +106,10 @@ public class TileEntityAccelerator extends TileEntityMachine implements IWrencha
             }
 
             recipe = pal.getInstantRecipe(inventory[0]);
+
+            if(recipe == null) { // Why didn't you say so before? Eh, whatever.
+                return null;
+            }
         }
         else if (te instanceof TileEntityElectricMachine) {
             if (te instanceof TileEntityRecycler) {
