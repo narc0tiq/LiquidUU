@@ -9,16 +9,16 @@ import net.minecraft.src.Slot;
 public class ContainerAccelerator extends Container {
     public TileEntityAccelerator accelerator;
 
-    public ContainerAccelerator(IInventory inventory, TileEntityAccelerator te) {
-        accelerator = te;
+    public ContainerAccelerator(IInventory inventory, TileEntityAccelerator accelerator) {
+        this.accelerator = accelerator;
 
         // Input slot: 9, 25
         // Output slot: 116, 25
         // Liquid item input: 152, 8
         // Machine display: 61, 24
         addSlotToContainer(new Slot(accelerator, 0, 9, 25));
-        addSlotToContainer(new Slot(accelerator, 1, 116, 25));
-        addSlotToContainer(new Slot(accelerator, 2, 152, 8));
+        addSlotToContainer(new SlotOutput(accelerator, 1, 116, 25));
+        addSlotToContainer(new SlotUUM(accelerator, 2, 152, 8));
         addSlotToContainer(new Slot(accelerator, -1, 61, 24));
 
         bindPlayerInventory(inventory);
@@ -44,9 +44,10 @@ public class ContainerAccelerator extends Container {
         return accelerator.isUseableByPlayer(player);
     }
 
+    // I'm guessing par2 = mouseButton and par3 = shiftKeyDown
     public ItemStack slotClick(int slotnum, int par2, boolean par3, EntityPlayer player) {
         if(slotnum == 3) {
-            return null; // Never give the player the machine in slot 4!
+            return null; // The machine in slot 4 is for display ONLY!
         }
         return super.slotClick(slotnum, par2, par3, player);
     }

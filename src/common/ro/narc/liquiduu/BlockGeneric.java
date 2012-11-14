@@ -127,8 +127,9 @@ public class BlockGeneric extends BlockContainer {
     }
 
     public void onBlockEventReceived(World world, int x, int y, int z, int eventID, int value) {
-
-        System.out.println("BlockGeneric block event with world " + world + " at " + x + ", " + y + ", " + z + ", event " + eventID + " with data " + value);
+        if(LiquidUU.DEBUG_NETWORK) {
+            System.out.println("BlockGeneric block event with world " + world + " at " + x + ", " + y + ", " + z + ", event " + eventID + " with data " + value);
+        }
 
         TileEntity te = world.getBlockTileEntity(x, y, z);
         if(!(te instanceof TileEntityAccelerator)) {

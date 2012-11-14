@@ -13,14 +13,14 @@ public class ClientProxy extends CommonProxy {
         MinecraftForgeClient.preloadTexture("/liquiduu-gfx/blocks.png");
         MinecraftForgeClient.preloadTexture("/liquiduu-gfx/items.png");
 
-        LanguageRegistry.addName(LiquidUU.liquidUU, "Liquid UU-Matter");
-        LanguageRegistry.addName(LiquidUU.cannedUU, "UU-Matter Can");
+        LanguageRegistry.addName(LiquidUU.liquidUU.getItem(), "Liquid UU-Matter");
+        LanguageRegistry.addName(LiquidUU.cannedUU.getItem(), "UU-Matter Can");
         LanguageRegistry.addName(LiquidUU.liquidUUBlock, "Uninitialized LiquidUU block");
         LanguageRegistry.addName(LiquidUU.accelerator, "Accelerator");
 
         TextureLiquidsFX liquidUUFX = new TextureLiquidsFX(140, 210, 40, 80, 140, 210, 
-                LiquidUU.liquidUU.getIconFromDamage(0), 
-                LiquidUU.liquidUU.getTextureFile());
+                LiquidUU.liquidUU.getItem().getIconFromDamage(0), 
+                LiquidUU.liquidUU.getItem().getTextureFile());
         liquidUUFX.tileImage = 3595;
         TextureFXManager.instance().addAnimation(liquidUUFX);
     }

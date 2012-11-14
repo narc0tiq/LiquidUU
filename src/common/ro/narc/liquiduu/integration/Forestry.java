@@ -19,24 +19,23 @@ public class Forestry {
     public static boolean init() {
 
         ItemStack canEmpty = ItemInterface.getItem("canEmpty");
-        ItemStack canUU    = new ItemStack(LiquidUU.cannedUU);
         ItemStack ingotTin = ItemInterface.getItem("ingotTin");
 
         RecipeManagers.squeezerManager.addRecipe(5, new ItemStack[]{Ic2Items.matter}, LiquidUU.liquidUUStack);
-        RecipeManagers.squeezerManager.addRecipe(5, new ItemStack[]{canUU}, LiquidUU.liquidUUStack, ingotTin, 5);
+        RecipeManagers.squeezerManager.addRecipe(5, new ItemStack[]{LiquidUU.cannedUU}, LiquidUU.liquidUUStack, ingotTin, 5);
 
         RecipeManagers.bottlerManager.addRecipe(5, LiquidUU.liquidUUStack, Ic2Items.cell, Ic2Items.matter);
-        RecipeManagers.bottlerManager.addRecipe(5, LiquidUU.liquidUUStack, canEmpty, canUU);
+        RecipeManagers.bottlerManager.addRecipe(5, LiquidUU.liquidUUStack, canEmpty, LiquidUU.cannedUU);
 
-        initBuildcraftLiquids(canUU, canEmpty);
+        initBuildcraftLiquids(canEmpty);
         initRefineryRecipes();
 
         return true;
     }
 
     @SuppressWarnings("unchecked")
-    public static void initBuildcraftLiquids(ItemStack canUU, ItemStack canEmpty) {
-        LiquidData cannedUUData = new LiquidData(LiquidUU.liquidUUStack, canUU, canEmpty);
+    public static void initBuildcraftLiquids(ItemStack canEmpty) {
+        LiquidData cannedUUData = new LiquidData(LiquidUU.liquidUUStack, LiquidUU.cannedUU, canEmpty);
         LiquidManager.liquids.add(cannedUUData);
     }
 
@@ -46,10 +45,11 @@ public class Forestry {
         Item liquidSeedOil = ItemInterface.getItem("liquidSeedOil").getItem();
         Item liquidJuice   = ItemInterface.getItem("liquidJuice").getItem();
         Item liquidHoney   = ItemInterface.getItem("liquidHoney").getItem();
+        Item liquidUU      = LiquidUU.liquidUU.getItem();
 
         RefineryRecipe.registerRefineryRecipe(
             new RefineryRecipe(
-                new LiquidStack(LiquidUU.liquidUU, 1),
+                new LiquidStack(liquidUU, 1),
                 new LiquidStack(liquidBiomass, 1),
                 new LiquidStack(liquidBiomass, 2),
                 5, 1
@@ -57,7 +57,7 @@ public class Forestry {
         );
         RefineryRecipe.registerRefineryRecipe(
             new RefineryRecipe(
-                new LiquidStack(LiquidUU.liquidUU, 2),
+                new LiquidStack(liquidUU, 2),
                 new LiquidStack(liquidBiofuel, 1),
                 new LiquidStack(liquidBiofuel, 2),
                 5, 1
@@ -65,7 +65,7 @@ public class Forestry {
         );
         RefineryRecipe.registerRefineryRecipe(
             new RefineryRecipe(
-                new LiquidStack(LiquidUU.liquidUU, 1),
+                new LiquidStack(liquidUU, 1),
                 new LiquidStack(liquidSeedOil, 1),
                 new LiquidStack(liquidSeedOil, 4),
                 5, 1
@@ -73,7 +73,7 @@ public class Forestry {
         );
         RefineryRecipe.registerRefineryRecipe(
             new RefineryRecipe(
-                new LiquidStack(LiquidUU.liquidUU, 1),
+                new LiquidStack(liquidUU, 1),
                 new LiquidStack(liquidJuice, 1),
                 new LiquidStack(liquidJuice, 4),
                 5, 1
@@ -81,7 +81,7 @@ public class Forestry {
         );
         RefineryRecipe.registerRefineryRecipe(
             new RefineryRecipe(
-                new LiquidStack(LiquidUU.liquidUU, 1),
+                new LiquidStack(liquidUU, 1),
                 new LiquidStack(liquidHoney, 1),
                 new LiquidStack(liquidHoney, 2),
                 5, 1

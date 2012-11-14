@@ -39,8 +39,10 @@ import ic2.common.Ic2Items;
         clientSideRequired=true
     )
 public class LiquidUU {
-    public static Item liquidUU;
-    public static Item cannedUU;
+    public static boolean DEBUG_NETWORK = false;
+
+    public static ItemStack liquidUU;
+    public static ItemStack cannedUU;
     public static Block liquidUUBlock;
     public static ItemStack accelerator;
     public static LiquidStack liquidUUStack;
@@ -69,22 +71,24 @@ public class LiquidUU {
         Property accelBlockID = config.getBlock("accelerator", 1300);
         Property liquidItemID = config.getItem("liquid.uu", 21001);
         Property cannedItemID = config.getItem("canned.uu", 21002);
+        //config.addCustomCategoryComment("general", "This might be useful later.");
         config.save();
 
-        liquidUU = new ItemGeneric(liquidItemID.getInt(21001));
-        liquidUU.setItemName("liquidUU");
-        liquidUU.setIconIndex(0);
-        liquidUU.setTextureFile("/liquiduu-gfx/items.png");
+        Item liquidUUItem = new ItemGeneric(liquidItemID.getInt(21001));
+        liquidUUItem.setItemName("liquidUU");
+        liquidUUItem.setIconIndex(0);
+        liquidUUItem.setTextureFile("/liquiduu-gfx/items.png");
+        liquidUU = new ItemStack(liquidUUItem, 1);
 
-        cannedUU = new ItemGeneric(cannedItemID.getInt(21002));
-        cannedUU.setItemName("cannedUU");
-        cannedUU.setIconIndex(1);
-        cannedUU.setTextureFile("/liquiduu-gfx/items.png");
+        Item cannedUUItem = new ItemGeneric(cannedItemID.getInt(21002));
+        cannedUUItem.setItemName("cannedUU");
+        cannedUUItem.setIconIndex(1);
+        cannedUUItem.setTextureFile("/liquiduu-gfx/items.png");
+        cannedUU = new ItemStack(cannedUUItem, 1);
 
         liquidUUBlock = new BlockGeneric(accelBlockID.getInt(1300));
         GameRegistry.registerBlock(liquidUUBlock, ItemGenericBlock.class);
         GameRegistry.registerTileEntity(TileEntityAccelerator.class, "Accelerator");
-
         accelerator = new ItemStack(liquidUUBlock, 1, BlockGeneric.DATA_ACCELERATOR);
 
         GameRegistry.addRecipe(accelerator, "TH", "SA", " w",
@@ -124,7 +128,7 @@ public class LiquidUU {
 
     @SuppressWarnings("unchecked")
     private static void initLiquidData() {
-        liquidUUStack = new LiquidStack(liquidUU, 1000);
+        liquidUUStack = new LiquidStack(liquidUU.getItem(), 1000);
         LiquidData liquidUUData = new LiquidData(liquidUUStack, Ic2Items.matter,
                 Ic2Items.cell);
         LiquidManager.liquids.add(liquidUUData);
@@ -135,9 +139,11 @@ public class LiquidUU {
     }
 
     private static void initRefineryRecipes() {
+        Item liquidUUItem = liquidUU.getItem();
+
         RefineryRecipe.registerRefineryRecipe(
             new RefineryRecipe(
-                new LiquidStack(liquidUU, 1),
+                new LiquidStack(liquidUUItem, 1),
                 new LiquidStack(Block.waterStill.blockID, 1),
                 new LiquidStack(Block.waterStill.blockID, 10),
                 5, 1
@@ -145,7 +151,7 @@ public class LiquidUU {
         );
         RefineryRecipe.registerRefineryRecipe(
             new RefineryRecipe(
-                new LiquidStack(liquidUU, 1),
+                new LiquidStack(liquidUUItem, 1),
                 new LiquidStack(Block.lavaStill.blockID, 1),
                 new LiquidStack(Block.lavaStill.blockID, 5),
                 5, 1
@@ -153,7 +159,7 @@ public class LiquidUU {
         );
         RefineryRecipe.registerRefineryRecipe(
             new RefineryRecipe(
-                new LiquidStack(liquidUU, 1),
+                new LiquidStack(liquidUUItem, 1),
                 new LiquidStack(BuildCraftEnergy.oilStill.blockID, 1),
                 new LiquidStack(BuildCraftEnergy.oilStill.blockID, 2),
                 5, 1
@@ -161,7 +167,7 @@ public class LiquidUU {
         );
         RefineryRecipe.registerRefineryRecipe(
             new RefineryRecipe(
-                new LiquidStack(liquidUU, 2),
+                new LiquidStack(liquidUUItem, 2),
                 new LiquidStack(BuildCraftEnergy.fuel.shiftedIndex, 1),
                 new LiquidStack(BuildCraftEnergy.fuel.shiftedIndex, 2),
                 5, 1
