@@ -1,7 +1,11 @@
 package ro.narc.liquiduu;
 
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
+
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.ICrafting;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
@@ -92,5 +96,18 @@ public class ContainerAccelerator extends Container {
         }
 
         return originalStack;
+    }
+
+    public void updateCraftingResults() {
+        super.updateCraftingResults();
+
+        for(int i = 0; i < crafters.size(); i++) {
+            accelerator.sendGUINetworkData(this, (ICrafting) crafters.get(i));
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void updateProgressBar(int key, int value) {
+        accelerator.getGUINetworkData(key, value);
     }
 }

@@ -122,8 +122,9 @@ public class LiquidUU {
     }
 
     @Mod.PostInit
-    public void init(FMLPostInitializationEvent event) {
+    public void postInit(FMLPostInitializationEvent event) {
         loadIntegration("Forestry");
+        loadIntegration("NEI");
     }
 
     @SuppressWarnings("unchecked")

@@ -62,7 +62,19 @@ public class BlockGeneric extends BlockContainer {
             }
         }
 
-        return TI_BROKEN;
+        return getBlockTextureFromSideAndMetadata(side, world.getBlockMetadata(x, y, z));
+    }
+
+    public int getBlockTextureFromSideAndMetadata(int side, int data) {
+        if(data == DATA_ACCELERATOR) {
+            if(side == 3) {
+                return TI_ACCELERATOR_FACE;
+            }
+
+            return TI_ACCELERATOR_SIDE;
+        }
+
+        return 2;
     }
 
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving entity) {
@@ -94,16 +106,16 @@ public class BlockGeneric extends BlockContainer {
         else {
             switch(facing) {
                 case 0:
-                    accelerator.setFacing((short) 2);
-                    break;
-                case 1:
-                    accelerator.setFacing((short) 5);
-                    break;
-                case 2:
                     accelerator.setFacing((short) 3);
                     break;
-                case 3:
+                case 1:
                     accelerator.setFacing((short) 4);
+                    break;
+                case 2:
+                    accelerator.setFacing((short) 2);
+                    break;
+                case 3:
+                    accelerator.setFacing((short) 5);
                     break;
             }
         }

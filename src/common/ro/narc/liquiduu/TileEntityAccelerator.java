@@ -4,6 +4,7 @@ import cpw.mods.fml.common.Side;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.ICrafting;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.MathHelper;
 import net.minecraft.src.NBTTagCompound;
@@ -17,17 +18,25 @@ import ic2.common.TileEntityMachine;
 import ic2.common.TileEntityElectricMachine;
 import ic2.common.TileEntityRecycler;
 
-public class TileEntityAccelerator extends TileEntityMachine implements IWrenchable {
+import buildcraft.api.core.Orientations;
+import buildcraft.api.liquids.ILiquidTank;
+import buildcraft.api.liquids.ITankContainer;
+import buildcraft.api.liquids.LiquidManager;
+import buildcraft.api.liquids.LiquidStack;
+import buildcraft.api.inventory.ISpecialInventory;
+
+public class TileEntityAccelerator extends TileEntityMachine implements IWrenchable, ISpecialInventory, ITankContainer {
     public short facing;
     public short prevFacing;
 
     public boolean initialized = false;
 
-    public int uu = 1024;
+    public LiquidUUTank tank;
 
     public TileEntityAccelerator() {
         super(3); // inventory slots
         this.blockType = LiquidUU.liquidUUBlock;
+        this.tank = new LiquidUUTank(2000);
     }
 
     public void updateEntity() {
@@ -37,6 +46,13 @@ public class TileEntityAccelerator extends TileEntityMachine implements IWrencha
 
         if(!initialized) {
             initialize();
+        }
+
+        if((inventory[2] != null) && isItemStackUUM(inventory[2])) {
+            if(tank.getLiquidAmount() <= 1000) {
+                fill(0, LiquidUU.liquidUUStack.copy(), true);
+                reduceInventorySlot(2, 1);
+            }
         }
     }
 
@@ -84,7 +100,114 @@ public class TileEntityAccelerator extends TileEntityMachine implements IWrencha
         return machineBlock.getPickBlock(null, worldObj, te.xCoord, te.yCoord, te.zCoord);
     }
 
-    public InstantRecipe getActiveRecipe() {
+    public String getInvName() {
+        return "liquiduu.accelerator";
+    }
+
+    public boolean wrenchCanSetFacing(EntityPlayer player, int side) {
+        if(this.facing != side) {
+            return true;
+        }
+        return false;
+    }
+
+    public short getFacing() {
+        return this.facing;
+    }
+
+    public void setFacing(short facing) {
+        this.facing = facing;
+
+        if(LiquidUU.getSide() == Side.CLIENT) {
+            return; // Client is a poopyface.
+        }
+
+        if(facing != this.prevFacing) {
+            if(LiquidUU.DEBUG_NETWORK) {
+                System.out.println("SetFacing: " + worldObj + ".addBlockEvent(" + xCoord + ", " + yCoord + ", " + zCoord + ", " + LiquidUU.liquidUUBlock.blockID + ", " + BlockGeneric.EID_FACING + ", " + facing + ")");
+            }
+            worldObj.addBlockEvent(xCoord, yCoord, zCoord, LiquidUU.liquidUUBlock.blockID, BlockGeneric.EID_FACING, facing);
+        }
+        this.prevFacing = facing;
+    }
+
+    public boolean wrenchCanRemove(EntityPlayer player) {
+        return true;
+    }
+
+    public float getWrenchDropRate() {
+        return 1.0F;
+    }
+
+    public boolean isItemStackUUM(ItemStack stack) {
+        return stack.isItemEqual(Ic2Items.matter) || stack.isItemEqual(LiquidUU.cannedUU);
+    }
+
+    public int getOperationCost() {
+        InstantRecipe recipe = getActiveRecipe();
+
+        if(recipe == null) {
+            return 0;
+        }
+
+        return recipe.uuCost;
+    }
+
+    // We have a negative-indexed slot, so we need to override these IInventory bits:
+    public synchronized ItemStack getStackInSlot(int slotnum)
+    {
+        if(slotnum < -1) {
+            return null;
+        }
+        else if(slotnum == -1) {
+            return getConnectedMachineItem();
+        }
+        else if (slotnum == 1) {
+            ItemStack output = null;
+
+            if(inventory[1] != null) {
+                output = inventory[1].copy();
+            }
+
+            InstantRecipe recipe = getActiveRecipe();
+            int batches = batchesPossible(recipe);
+
+            if (batches <= 0) {
+                return output;
+            }
+
+            if(output == null) {
+                output = recipe.output.copy();
+                output.stackSize *= batches;
+            }
+            else {
+                output.stackSize += recipe.output.stackSize * batches;
+            }
+
+            return output;
+        }
+        return super.getStackInSlot(slotnum);
+    }
+
+    public synchronized ItemStack decrStackSize(int slotnum, int amount)
+    {
+        if (slotnum < 0) {
+            return null;
+        }
+        else if (slotnum == 1) {
+            return getOutput(amount, true);
+        }
+        return super.decrStackSize(slotnum, amount);
+    }
+
+    public synchronized void setInventorySlotContents(int slotnum, ItemStack itemstack) {
+        if(slotnum < 0 || slotnum == 1) {
+            return;
+        }
+        super.setInventorySlotContents(slotnum, itemstack);
+    }
+
+     public InstantRecipe getActiveRecipe() {
         TileEntity te = getConnectedMachine();
 
         if(te == null) {
@@ -142,18 +265,8 @@ public class TileEntityAccelerator extends TileEntityMachine implements IWrencha
         return null;
     }
 
-    public int getOperationCost() {
-        InstantRecipe recipe = getActiveRecipe();
-
-        if(recipe == null) {
-            return 0;
-        }
-
-        return recipe.uuCost;
-    }
-
     public void consumeUU(int amount) {
-        uu -= amount;
+        tank.drain(amount, true);
     }
 
     public int batchesPossible() {
@@ -175,7 +288,7 @@ public class TileEntityAccelerator extends TileEntityMachine implements IWrencha
 
         int count = inventory[0].stackSize / activeRecipe.getInputSize();
 
-        count = Math.min(count, this.uu / activeRecipe.uuCost);
+        count = Math.min(count, tank.getLiquidAmount() / activeRecipe.uuCost);
 
         if (activeRecipe.machine != null) {
             count = Math.min(count, activeRecipe.machine.instantCapacity(activeRecipe, count));
@@ -196,187 +309,175 @@ public class TileEntityAccelerator extends TileEntityMachine implements IWrencha
 
     // Protected because it's assumed that activeRecipe == this.getActiveRecipe() and that
     // batches <= batchesPossible(activeRecipe)
-    protected void process(InstantRecipe activeRecipe, int batches) {
-        if (batches <= 0) {
-            return;
+    protected ItemStack process(InstantRecipe activeRecipe, int batches, boolean wetRun) {
+        if((activeRecipe == null) || (batches <= 0)) {
+            return null;
         }
 
-        consumeUU(batches * activeRecipe.uuCost);
-        if (activeRecipe.machine != null) {
-            activeRecipe.machine.instantProcess(activeRecipe, batches);
-        }
+        if(wetRun) {
+            if (activeRecipe.machine != null) {
+                activeRecipe.machine.instantProcess(activeRecipe, batches);
+            }
 
-        inventory[0].stackSize -= (activeRecipe.getInputSize() * batches);
-        if (inventory[0].stackSize <= 0) {
-            inventory[0] = null;
+            consumeUU(activeRecipe.uuCost * batches);
+            reduceInventorySlot(0, activeRecipe.getInputSize() * batches);
         }
+        ItemStack out = activeRecipe.output.copy();
+        out.stackSize *= batches;
 
-        if (inventory[1] != null) {
-            inventory[1].stackSize += activeRecipe.getOutputSize() * batches;
-        } else {
-            inventory[1] = activeRecipe.output.copy();
-            inventory[1].stackSize *= batches;
-        }
+        return out;
     }
 
-    public void attemptProcessing() {
+   public synchronized ItemStack getOutput(int amount, boolean wetRun) {
+        if(amount <= 0) {
+            return null;
+        }
+
         InstantRecipe recipe = getActiveRecipe();
-        int count = batchesPossible(recipe);
-        process(recipe, count);
-    }
+        int maxBatches = batchesPossible(recipe);
 
-    public String getInvName() {
-        return "liquiduu.accelerator";
-    }
-
-    public boolean wrenchCanSetFacing(EntityPlayer player, int side) {
-        if(this.facing != side) {
-            return true;
-        }
-        return false;
-    }
-
-    public short getFacing() {
-        return this.facing;
-    }
-
-    public void setFacing(short facing) {
-        this.facing = facing;
-
-        if(LiquidUU.getSide() == Side.CLIENT) {
-            return; // Client is a poopyface.
+        // Try to request fewer (even zero) batches if we already have some in storage.
+        int amount_ready = 0;
+        if(inventory[1] != null) {
+            amount_ready = inventory[1].stackSize;
         }
 
-        if(facing != this.prevFacing) {
-            if(LiquidUU.DEBUG_NETWORK) {
-                System.out.println("SetFacing: " + worldObj + ".addBlockEvent(" + xCoord + ", " + yCoord + ", " + zCoord + ", " + LiquidUU.liquidUUBlock.blockID + ", " + BlockGeneric.EID_FACING + ", " + facing + ")");
-            }
-            worldObj.addBlockEvent(xCoord, yCoord, zCoord, LiquidUU.liquidUUBlock.blockID, BlockGeneric.EID_FACING, facing);
+        int batches = 0;
+        if(recipe != null) {
+            float batches_requested = ((float) amount - amount_ready) / recipe.getOutputSize();
+            batches = Math.min(maxBatches, MathHelper.ceiling_float_int(batches_requested));
         }
-        this.prevFacing = facing;
-    }
 
-    public boolean wrenchCanRemove(EntityPlayer player) {
-        return true;
-    }
-
-    public float getWrenchDropRate() {
-        return 1.0F;
-    }
-
-    public boolean isItemStackUUM(ItemStack stack) {
-        return stack.isItemEqual(Ic2Items.matter) || stack.isItemEqual(LiquidUU.cannedUU);
-    }
-
-    // We have a negative-indexed slot, so we need to override these IInventory bits:
-    public synchronized ItemStack getStackInSlot(int slotnum)
-    {
-        if(slotnum < -1) {
-            return null;
-        }
-        else if(slotnum == -1) {
-            return getConnectedMachineItem();
-        }
-        else if (slotnum == 1) {
-            ItemStack output = null;
-
-            if(inventory[1] != null) {
-                output = inventory[1].copy();
-            }
-
-            InstantRecipe recipe = getActiveRecipe();
-            int batches = batchesPossible(recipe);
-
-            if (batches <= 0) {
-                return output;
-            }
-
-            if(output == null) {
-                output = recipe.output.copy();
-                output.stackSize *= batches;
-            }
-            else {
-                output.stackSize += recipe.output.stackSize * batches;
-            }
-
-            return output;
-        }
-        return super.getStackInSlot(slotnum);
-    }
-
-    public synchronized ItemStack decrStackSize(int slotnum, int amount)
-    {
-        if (slotnum < 0) {
-            return null;
-        }
-        else if (slotnum == 1) {
-            System.out.println("Side " + LiquidUU.getSide() + " decrStackSize("+slotnum+","+amount+")");
-            // I just know I'm going to look at this code later and think up a cleaner way to
-            //write the same damned thing. For now, this will do (if it works). --Narc
-            if(amount == 0) {
+        // Go ahead and make the batches (simulate, if appropriate)
+        ItemStack output = process(recipe, batches, wetRun);
+        if(output == null) {
+            if(inventory[1] == null) {
                 return null;
             }
 
-            ItemStack output = null;
-            if(inventory[1] != null) {
-                output = inventory[1].copy();
-            }
+            output = inventory[1];
+        }
+        else {
+            output.stackSize += amount_ready;
+        }
 
-            InstantRecipe recipe = getActiveRecipe();
-            int batches = batchesPossible(recipe);
+        // Did we end up with more than we needed? Store the excess.
+        if(wetRun) {
+            inventory[1] = output.copy();
+            reduceInventorySlot(1, amount);
+        }
+        output.stackSize = Math.min(amount, output.stackSize);
 
-            if (batches <= 0) {
-                output.stackSize = Math.min(amount, output.stackSize);
-                inventory[1].stackSize -= output.stackSize;
+        return output;
+    }
 
-                if(inventory[1].stackSize == 0) {
-                    inventory[1] = null;
+    // Convenience function.
+    public synchronized void reduceInventorySlot(int slot, int amount) {
+        if(inventory[slot] == null) {
+            return;
+        }
+
+        inventory[slot].stackSize -= amount;
+
+        if(inventory[slot].stackSize <= 0) {
+            inventory[slot] = null;
+        }
+    }
+
+    public synchronized int addToInventorySlot(int slot, ItemStack stack, boolean wetRun) {
+        if((inventory[slot] != null) && !stack.isItemEqual(inventory[slot])) {
+            return 0;
+        }
+
+        ItemStack workStack = inventory[slot];
+        if(workStack == null) {
+            workStack = stack.copy();
+            workStack.stackSize = 0;
+        }
+
+        int transferAmount = Math.min(stack.stackSize,
+                                      stack.getMaxStackSize() - workStack.stackSize);
+
+        if(wetRun) {
+            workStack.stackSize += transferAmount;
+            inventory[slot] = workStack;
+        }
+
+        return transferAmount;
+    }
+
+    public synchronized int addItem(ItemStack stack, boolean wetRun, Orientations side) {
+        if(isItemStackUUM(stack)) {
+            return addToInventorySlot(2, stack, wetRun);
+        }
+
+        return addToInventorySlot(0, stack, wetRun);
+    }
+
+    public ItemStack[] extractItem(boolean wetRun, Orientations side, int amount) {
+        ItemStack out = getOutput(amount, wetRun);
+
+        return new ItemStack[]{out};
+    }
+
+    public int fill(Orientations side, LiquidStack resource, boolean wetRun) {
+        return fill(0, resource, wetRun);
+    }
+
+    public int fill(int tankIndex, LiquidStack resource, boolean wetRun) {
+        if((tankIndex != 0) || !LiquidUU.liquidUUStack.isLiquidEqual(resource)) {
+            return 0; // What's this crap you're trying to feed me?
+        }
+
+        return tank.fill(resource, wetRun);
+    }
+
+    public LiquidStack drain(Orientations side, int amount, boolean wetRun) {
+        return null; // No, you may not have my UUM!
+    }
+
+    public LiquidStack drain(int tankIndex, int amount, boolean wetRun) {
+        return null;
+    }
+
+    public ILiquidTank[] getTanks() {
+        return new ILiquidTank[]{tank};
+    }
+
+    public void getGUINetworkData(int key, int value) {
+        switch(key) {
+            case 0:
+                LiquidStack uu = tank.getLiquid();
+                if(uu == null) {
+                    uu = LiquidUU.liquidUUStack.copy();
                 }
 
-                return output;
-            }
-
-            int amount_ready = 0;
-            if(inventory[1] != null) {
-                amount_ready = inventory[1].stackSize;
-            }
-
-            float batches_requested = ((float) amount - amount_ready) / recipe.getOutputSize();
-            batches = Math.min(batches, MathHelper.ceiling_float_int(batches_requested));
-            process(recipe, batches); // puts its output into inventory[1]
-
-            if(inventory[1] == null) { // probably shouldn't happen, but if it does...
-                return null;
-            }
-
-            output = inventory[1].copy();
-            if(inventory[1].stackSize > amount) {
-                inventory[1].stackSize -= amount;
-                output.stackSize = amount;
-            }
-            else {
-                inventory[1] = null;
-            }
-
-            return output;
+                uu.amount = value;
+                tank.setLiquid(uu);
+                break;
+            default:
+                System.err.println("LiquidUU: Accelerator got unknown GUI network data for key " + key + ": " + value);
+                break;
         }
-        return super.decrStackSize(slotnum, amount);
     }
 
-    public synchronized void setInventorySlotContents(int slotnum, ItemStack itemstack) {
-        if(slotnum < 0 || slotnum == 1) {
-            return;
-        }
-        super.setInventorySlotContents(slotnum, itemstack);
+    public void sendGUINetworkData(ContainerAccelerator container, ICrafting iCrafting) {
+        iCrafting.updateCraftingInventoryInfo(container, 0, tank.getLiquidAmount());
     }
 
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         this.prevFacing = this.facing = tag.getShort("face");
+        tank.setLiquid(LiquidStack.loadLiquidStackFromNBT(tag.getCompoundTag("uumTank")));
     }
 
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         tag.setShort("face", this.facing);
+        if(tank.getLiquid() != null) {
+            NBTTagCompound newTag = new NBTTagCompound();
+            tank.getLiquid().writeToNBT(newTag);
+            tag.setCompoundTag("uumTank", newTag);
+        }
     }
 }
