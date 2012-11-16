@@ -12,6 +12,10 @@ public class SlotUUM extends Slot {
     }
 
     public boolean isItemValid(ItemStack stack) {
+        if(stack == null) {
+            return false;
+        }
+
         if(stack.isItemEqual(LiquidUU.cannedUU) || stack.isItemEqual(Ic2Items.matter)) {
             return true;
         }
