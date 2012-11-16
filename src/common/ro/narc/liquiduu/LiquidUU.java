@@ -36,8 +36,7 @@ import ic2.common.Ic2Items;
         dependencies="required-after:IC2;required-after:BuildCraft|Transport;required-after:BuildCraft|Energy;required-after:BuildCraft|Factory;after:Forestry"
     )
 @NetworkMod(
-        clientSideRequired=true,
-        versionBounds="[0.7]"
+        clientSideRequired=true
     )
 public class LiquidUU {
     public static boolean DEBUG_NETWORK = false;
