@@ -66,16 +66,15 @@ public class GUIAccelerator extends GuiContainer {
     }
 
     protected void drawGuiContainerForegroundLayer() {
-        fontRenderer.drawString("Accelerator", left + 4, top + 2, 0x404040);
-
-        drawCenteredString("Connected Machine", 70, top + 12, 0x404040);
-
         String machineName = "None";
         ItemStack machine = inventorySlots.getSlot(3).getStack();
         if(machine != null) {
             machineName = StatCollector.translateToLocal(machine.getItemName() + ".name");
         }
-        drawCenteredString(machineName, 70, top + 38, 0x404040);
+
+        drawCenteredString("Accelerator",       70, top +  2, 0x404040);
+        drawCenteredString("Connected Machine", 70, top + 12, 0x404040);
+        drawCenteredString(machineName,         70, top + 38, 0x404040);
 
         int uumAmount = accelerator.tank.getLiquidAmount();
         int operationCost = accelerator.getOperationCost();
@@ -110,18 +109,37 @@ public class GUIAccelerator extends GuiContainer {
     }
 
     public void drawOperationCosts(int cost) {
-        String[] line1 = String.format("%.3f UUM/operation", (float)cost / 1000).split("\\.");
-        String[] line2 = String.format("%.2f operations/UUM", 1000.0F / cost).split("\\.");
+        String[] line1 = String.format("%.3f UUM/operation",  cost / 1000.0F).split("[. ]");
+        String[] line2 = String.format("%.3f operations/UUM", 1000.0F / cost).split("[. ]");
 
-        int topWidth = fontRenderer.getStringWidth(line1[1]);
-        int botWidth = fontRenderer.getStringWidth(line2[1]);
-        int width = Math.max(topWidth, botWidth);
+        int topWidths[] = new int[3];
+        int botWidths[] = new int[3];
 
-        fontRenderer.drawString("." + line1[1], (right - 24) - width, bottom - 17, 0x404040);
-        fontRenderer.drawString("." + line2[1], (right - 24) - width, bottom - 8, 0x404040);
+        for (int i=0; i<3; i++) {
+            topWidths[i] = fontRenderer.getStringWidth(line1[i]);
+            botWidths[i] = fontRenderer.getStringWidth(line2[i]);
+        }
 
-        drawRightAlignedString(line1[0], (right - 24) - width, bottom - 17, 0x404040);
-        drawRightAlignedString(line2[0], (right - 24) - width, bottom - 8, 0x404040);
+        int dotWidth = fontRenderer.getStringWidth(".");
+        int spaceWidth = fontRenderer.getStringWidth(" ");
+
+        int offsets[] = new int[3];
+        offsets[2] = Math.max(topWidths[2], botWidths[2]);
+        offsets[1] = Math.max(topWidths[1], botWidths[1]) + dotWidth + spaceWidth;
+        // Keep offsets[0], just for aligning the arrays.
+
+        int rightAlign = right - 24 - offsets[2];
+
+        fontRenderer.drawString(line1[2], rightAlign, bottom-17, 0x404040);
+        fontRenderer.drawString(line2[2], rightAlign, bottom-8,  0x404040);
+
+        rightAlign -= offsets[1];
+
+        fontRenderer.drawString("." + line1[1], rightAlign, bottom-17, 0x404040);
+        fontRenderer.drawString("." + line2[1], rightAlign, bottom-8,  0x404040);
+
+        fontRenderer.drawString(line1[0], rightAlign - topWidths[0], bottom-17, 0x404040);
+        fontRenderer.drawString(line2[0], rightAlign - botWidths[0], bottom-8,  0x404040);
     }
 
     public void drawLiquidTank(int x, int y, int scaledValue) {

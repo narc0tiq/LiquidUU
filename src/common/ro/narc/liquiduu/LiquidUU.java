@@ -31,12 +31,13 @@ import ic2.common.Ic2Items;
 
 @Mod(
         modid="LiquidUU",
-        version="0.7.1",
+        version="0.7.2",
         useMetadata=true,
         dependencies="required-after:IC2;required-after:BuildCraft|Transport;required-after:BuildCraft|Energy;required-after:BuildCraft|Factory;after:Forestry"
     )
 @NetworkMod(
-        clientSideRequired=true
+        clientSideRequired = true,
+        versionBounds = "[0.7, 0.8)"
     )
 public class LiquidUU {
     public static boolean DEBUG_NETWORK = false;

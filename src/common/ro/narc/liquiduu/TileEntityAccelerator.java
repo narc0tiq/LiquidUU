@@ -85,7 +85,13 @@ public class TileEntityAccelerator extends TileEntityMachine implements IWrencha
                 x++; break;
         }
 
-        return worldObj.getBlockTileEntity(x, y, z);
+        TileEntity te = worldObj.getBlockTileEntity(x, y, z);
+
+        if((te instanceof TileEntityElectricMachine) || (te instanceof IAcceleratorFriend)) {
+            return te;
+        }
+
+        return null;
     }
 
     public ItemStack getConnectedMachineItem() {
@@ -288,7 +294,9 @@ public class TileEntityAccelerator extends TileEntityMachine implements IWrencha
 
         int count = inventory[0].stackSize / activeRecipe.getInputSize();
 
-        count = Math.min(count, tank.getLiquidAmount() / activeRecipe.uuCost);
+        if(activeRecipe.uuCost > 0) {
+            count = Math.min(count, tank.getLiquidAmount() / activeRecipe.uuCost);
+        }
 
         if (activeRecipe.machine != null) {
             count = Math.min(count, activeRecipe.machine.instantCapacity(activeRecipe, count));
