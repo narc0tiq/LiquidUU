@@ -5,9 +5,11 @@ import cpw.mods.fml.common.Side;
 import net.minecraft.src.Block;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ICrafting;
+import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.MathHelper;
 import net.minecraft.src.NBTTagCompound;
+import net.minecraft.src.NBTTagList;
 import net.minecraft.src.Packet;
 import net.minecraft.src.Packet54PlayNoteBlock;
 import net.minecraft.src.TileEntity;
@@ -25,7 +27,7 @@ import buildcraft.api.liquids.LiquidManager;
 import buildcraft.api.liquids.LiquidStack;
 import buildcraft.api.inventory.ISpecialInventory;
 
-public class TileEntityAccelerator extends TileEntityMachine implements IWrenchable, ISpecialInventory, ITankContainer {
+public class TileEntityAccelerator extends TileEntity implements IWrenchable, ISpecialInventory, ITankContainer, IInventory {
     public short facing;
     public short prevFacing;
 
@@ -34,7 +36,10 @@ public class TileEntityAccelerator extends TileEntityMachine implements IWrencha
     public LiquidUUTank tank;
 
     public TileEntityAccelerator() {
-        super(3); // inventory slots
+        super();
+
+        this.inventory = new ItemStack[3];
+
         this.blockType = LiquidUU.liquidUUBlock;
         this.tank = new LiquidUUTank(2000);
     }
@@ -106,10 +111,6 @@ public class TileEntityAccelerator extends TileEntityMachine implements IWrencha
         return machineBlock.getPickBlock(null, worldObj, te.xCoord, te.yCoord, te.zCoord);
     }
 
-    public String getInvName() {
-        return "liquiduu.accelerator";
-    }
-
     public boolean wrenchCanSetFacing(EntityPlayer player, int side) {
         if(this.facing != side) {
             return true;
@@ -159,16 +160,22 @@ public class TileEntityAccelerator extends TileEntityMachine implements IWrencha
         return recipe.uuCost;
     }
 
-    // We have a negative-indexed slot, so we need to override these IInventory bits:
+// public interface IInventory {
+    public ItemStack[] inventory;
+
+    public int getSizeInventory() {
+        return this.inventory.length;
+    }
+
     public synchronized ItemStack getStackInSlot(int slotnum)
     {
-        if(slotnum < -1) {
+        if((slotnum < -1) || (slotnum > 3)) { // Does not exist
             return null;
         }
-        else if(slotnum == -1) {
+        else if(slotnum == -1) { // Fake slot
             return getConnectedMachineItem();
         }
-        else if (slotnum == 1) {
+        else if (slotnum == 1) { // Output slot is also special
             ItemStack output = null;
 
             if(inventory[1] != null) {
@@ -192,28 +199,73 @@ public class TileEntityAccelerator extends TileEntityMachine implements IWrencha
 
             return output;
         }
-        return super.getStackInSlot(slotnum);
+
+        return inventory[slotnum];
     }
 
     public synchronized ItemStack decrStackSize(int slotnum, int amount)
     {
-        if (slotnum < 0) {
+        if((slotnum < 0) || (slotnum > 3)) { // Can't decrement these
             return null;
         }
         else if (slotnum == 1) {
             return getOutput(amount, true);
         }
-        return super.decrStackSize(slotnum, amount);
+
+        if(inventory[slotnum] == null) {
+            return null;
+        }
+
+        ItemStack output = inventory[slotnum].copy();
+        reduceInventorySlot(slotnum, amount);
+        output.stackSize = Math.min(output.stackSize, amount);
+
+        return output;
+    }
+
+    public ItemStack getStackInSlotOnClosing(int slotnum) {
+        return null;
     }
 
     public synchronized void setInventorySlotContents(int slotnum, ItemStack itemstack) {
-        if(slotnum < 0 || slotnum == 1) {
+        // You may not set the output slot, or slots that don't exist.
+        if(slotnum < 0 || slotnum == 1 || slotnum > 3) {
+            itemstack = null;
             return;
         }
-        super.setInventorySlotContents(slotnum, itemstack);
+        if(itemstack != null && itemstack.stackSize > this.getInventoryStackLimit()) {
+            itemstack.stackSize = this.getInventoryStackLimit();
+        }
+        this.inventory[slotnum] = itemstack;
     }
 
-     public InstantRecipe getActiveRecipe() {
+    public String getInvName() {
+        return "liquiduu.accelerator";
+    }
+
+    public int getInventoryStackLimit() {
+        return 64;
+    }
+
+    // public void onInventoryChanged() // Implemented by TileEntity;
+
+    public boolean isUseableByPlayer(EntityPlayer player) {
+        if(worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) != this) {
+            return false;
+        }
+
+        if(player.getDistance((double)xCoord + 0.5D, (double)yCoord + 0.5D, (double)zCoord + 0.5D) > 64.0D) {
+            return false;
+        }
+        return true;
+    }
+
+    public void openChest() {}
+    public void closeChest() {}
+//} // interface IInventory
+
+
+    public InstantRecipe getActiveRecipe() {
         TileEntity te = getConnectedMachine();
 
         if(te == null) {
@@ -428,6 +480,7 @@ public class TileEntityAccelerator extends TileEntityMachine implements IWrencha
         return new ItemStack[]{out};
     }
 
+// public interface ITankContainer {
     public int fill(Orientations side, LiquidStack resource, boolean wetRun) {
         return fill(0, resource, wetRun);
     }
@@ -451,6 +504,7 @@ public class TileEntityAccelerator extends TileEntityMachine implements IWrencha
     public ILiquidTank[] getTanks() {
         return new ILiquidTank[]{tank};
     }
+//} // interface ITankContainer
 
     public void getGUINetworkData(int key, int value) {
         switch(key) {
@@ -475,12 +529,37 @@ public class TileEntityAccelerator extends TileEntityMachine implements IWrencha
 
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
+
+        this.inventory = new ItemStack[3];
+        NBTTagList tagItems = tag.getTagList("Items");
+        for(int i = 0; i < tagItems.tagCount(); i++) {
+            NBTTagCompound slotTag = (NBTTagCompound)tagItems.tagAt(i);
+            byte slotnum = slotTag.getByte("Slot");
+            if(slotnum >= 0 && slotnum < this.inventory.length) {
+                this.inventory[slotnum] = ItemStack.loadItemStackFromNBT(slotTag);
+            }
+        }
+
         this.prevFacing = this.facing = tag.getShort("face");
         tank.setLiquid(LiquidStack.loadLiquidStackFromNBT(tag.getCompoundTag("uumTank")));
     }
 
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
+
+        NBTTagList tagItems = new NBTTagList();
+        for(int i = 0; i < this.inventory.length; i++) {
+            if(this.inventory[i] == null) {
+                continue;
+            }
+
+            NBTTagCompound slotTag = new NBTTagCompound();
+            slotTag.setByte("Slot", (byte)i);
+            this.inventory[i].writeToNBT(slotTag);
+            tagItems.appendTag(slotTag);
+        }
+        tag.setTag("Items", tagItems);
+
         tag.setShort("face", this.facing);
         if(tank.getLiquid() != null) {
             NBTTagCompound newTag = new NBTTagCompound();
