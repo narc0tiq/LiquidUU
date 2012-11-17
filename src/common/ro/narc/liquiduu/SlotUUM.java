@@ -11,6 +11,7 @@ public class SlotUUM extends Slot {
         super(inventory, slotIndex, xPos, yPos);
     }
 
+    @Override
     public boolean isItemValid(ItemStack stack) {
         if(stack == null) {
             return false;

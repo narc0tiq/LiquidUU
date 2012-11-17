@@ -9,10 +9,12 @@ public class ItemGenericBlock extends ItemBlock {
         setHasSubtypes(true);
     }
 
+    @Override
     public int getMetadata(int damage) {
         return damage;
     }
 
+    @Override
     public String getItemNameIS(ItemStack itemstack)
     {
         int damage = itemstack.getItemDamage();

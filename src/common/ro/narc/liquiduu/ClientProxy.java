@@ -9,6 +9,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraft.src.Item;
 
 public class ClientProxy extends CommonProxy {
+    @Override
     public void init() {
         MinecraftForgeClient.preloadTexture("/liquiduu-gfx/blocks.png");
         MinecraftForgeClient.preloadTexture("/liquiduu-gfx/items.png");

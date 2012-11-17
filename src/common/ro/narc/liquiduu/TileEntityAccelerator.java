@@ -44,6 +44,7 @@ public class TileEntityAccelerator extends TileEntity implements IWrenchable, IS
         this.tank = new LiquidUUTank(2000);
     }
 
+    @Override
     public void updateEntity() {
         if(isInvalid()) {
             return;
@@ -65,6 +66,7 @@ public class TileEntityAccelerator extends TileEntity implements IWrenchable, IS
         initialized = true;
     }
 
+    @Override
     public Packet getDescriptionPacket() {
         return new Packet54PlayNoteBlock(xCoord, yCoord, zCoord, LiquidUU.liquidUUBlock.blockID, BlockGeneric.EID_FACING, facing);
     }
@@ -466,6 +468,7 @@ public class TileEntityAccelerator extends TileEntity implements IWrenchable, IS
         return transferAmount;
     }
 
+// public interface ISpecialInventory extends IInventory {
     public synchronized int addItem(ItemStack stack, boolean wetRun, Orientations side) {
         if(isItemStackUUM(stack)) {
             return addToInventorySlot(2, stack, wetRun);
@@ -479,6 +482,7 @@ public class TileEntityAccelerator extends TileEntity implements IWrenchable, IS
 
         return new ItemStack[]{out};
     }
+// }
 
 // public interface ITankContainer {
     public int fill(Orientations side, LiquidStack resource, boolean wetRun) {
@@ -527,6 +531,7 @@ public class TileEntityAccelerator extends TileEntity implements IWrenchable, IS
         iCrafting.updateCraftingInventoryInfo(container, 0, tank.getLiquidAmount());
     }
 
+    @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
 
@@ -544,6 +549,7 @@ public class TileEntityAccelerator extends TileEntity implements IWrenchable, IS
         tank.setLiquid(LiquidStack.loadLiquidStackFromNBT(tag.getCompoundTag("uumTank")));
     }
 
+    @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
 

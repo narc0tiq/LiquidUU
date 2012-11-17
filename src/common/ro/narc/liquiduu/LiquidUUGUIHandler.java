@@ -7,6 +7,7 @@ import net.minecraft.src.TileEntity;
 import cpw.mods.fml.common.network.IGuiHandler;
 
 public class LiquidUUGUIHandler implements IGuiHandler {
+    @Override
     public Object getServerGuiElement(int id, EntityPlayer player, World world,
             int x, int y, int z) {
         TileEntity te = world.getBlockTileEntity(x, y, z);
@@ -18,6 +19,7 @@ public class LiquidUUGUIHandler implements IGuiHandler {
         return null;
     }
 
+    @Override
     public Object getClientGuiElement(int id, EntityPlayer player, World world,
             int x, int y, int z) {
         TileEntity te = world.getBlockTileEntity(x, y, z);

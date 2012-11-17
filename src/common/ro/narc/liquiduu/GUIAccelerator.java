@@ -38,6 +38,7 @@ public class GUIAccelerator extends GuiContainer {
         bottom = top + main_height;
     }
 
+    @Override
     protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
         int textureID = mc.renderEngine.getTexture("/liquiduu-gfx/gui-accelerator.png");
         mc.renderEngine.bindTexture(textureID);
@@ -65,6 +66,7 @@ public class GUIAccelerator extends GuiContainer {
         GL11.glPopMatrix();
     }
 
+    @Override
     protected void drawGuiContainerForegroundLayer() {
         String machineName = "None";
         ItemStack machine = inventorySlots.getSlot(3).getStack();
@@ -98,16 +100,19 @@ public class GUIAccelerator extends GuiContainer {
         }
     }
 
+    @Override
     public void drawCenteredString(String s, int x, int y, int color) {
         fontRenderer.drawString(s, x - fontRenderer.getStringWidth(s) / 2, y,
                                 color);
     }
 
+    @Override
     public void drawRightAlignedString(String s, int x, int y, int color) {
         fontRenderer.drawString(s, x - fontRenderer.getStringWidth(s), y,
                                 color);
     }
 
+    @Override
     public void drawOperationCosts(int cost) {
         String[] line1 = String.format("%.3f UUM/operation",  cost / 1000.0F).split("[. ]");
         String[] line2 = String.format("%.3f operations/UUM", 1000.0F / cost).split("[. ]");
@@ -196,6 +201,7 @@ public class GUIAccelerator extends GuiContainer {
     }
 
     // And because we need mouseX and mouseY and nobody seems to be keeping track of them...
+    @Override
     protected void mouseMovedOrUp(int x, int y, int button) {
         super.mouseMovedOrUp(x, y, button);
 

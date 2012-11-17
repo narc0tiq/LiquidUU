@@ -44,11 +44,13 @@ public class ContainerAccelerator extends Container {
         }
     }
 
+    @Override
     public boolean canInteractWith(EntityPlayer player) {
         return accelerator.isUseableByPlayer(player);
     }
 
     // I'm guessing par2 = mouseButton and par3 = shiftKeyDown
+    @Override
     public ItemStack slotClick(int slotnum, int par2, boolean par3, EntityPlayer player) {
         if(slotnum == 3) {
             return null; // The machine in slot 4 is for display ONLY!
@@ -56,6 +58,7 @@ public class ContainerAccelerator extends Container {
         return super.slotClick(slotnum, par2, par3, player);
     }
 
+    @Override
     public ItemStack transferStackInSlot(int slotnum) {
         Slot slot = (Slot)inventorySlots.get(slotnum);
 
@@ -98,6 +101,7 @@ public class ContainerAccelerator extends Container {
         return originalStack;
     }
 
+    @Override
     public void updateCraftingResults() {
         super.updateCraftingResults();
 
@@ -107,6 +111,7 @@ public class ContainerAccelerator extends Container {
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     public void updateProgressBar(int key, int value) {
         accelerator.getGUINetworkData(key, value);
     }

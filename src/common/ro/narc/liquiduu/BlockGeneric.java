@@ -35,14 +35,17 @@ public class BlockGeneric extends BlockContainer {
         this(id, Material.iron);
     }
 
+    @Override
     public String getTextureFile() {
         return "/liquiduu-gfx/blocks.png";
     }
 
+    @Override
     public TileEntity createNewTileEntity(World world) {
         return null;
     }
 
+    @Override
     public TileEntity createNewTileEntity(World world, int data) {
         if(data == DATA_ACCELERATOR) {
             return new TileEntityAccelerator();
@@ -51,6 +54,7 @@ public class BlockGeneric extends BlockContainer {
         return null;
     }
 
+    @Override
     public int getBlockTexture(IBlockAccess world, int x, int y, int z, int side) {
         TileEntity te = world.getBlockTileEntity(x, y, z);
 
@@ -66,6 +70,7 @@ public class BlockGeneric extends BlockContainer {
         return getBlockTextureFromSideAndMetadata(side, world.getBlockMetadata(x, y, z));
     }
 
+    @Override
     public int getBlockTextureFromSideAndMetadata(int side, int data) {
         if(data == DATA_ACCELERATOR) {
             if(side == 3) {
@@ -78,6 +83,7 @@ public class BlockGeneric extends BlockContainer {
         return 2;
     }
 
+    @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving entity) {
         if(LiquidUU.getSide() == Side.CLIENT) {
             return;
@@ -122,6 +128,7 @@ public class BlockGeneric extends BlockContainer {
         }
     }
 
+    @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hit_x, float hit_y, float hit_z) {
         if(player.isSneaking()) {
             return false;
@@ -139,6 +146,7 @@ public class BlockGeneric extends BlockContainer {
         return true;
     }
 
+    @Override
     public void onBlockEventReceived(World world, int x, int y, int z, int eventID, int value) {
         if(LiquidUU.DEBUG_NETWORK) {
             System.out.println("BlockGeneric block event with world " + world + " at " + x + ", " + y + ", " + z + ", event " + eventID + " with data " + value);
@@ -157,6 +165,7 @@ public class BlockGeneric extends BlockContainer {
         }
     }
 
+    @Override
     public void breakBlock(World world, int x, int y, int z, int par5, int par6) {
         dropItems(world, x, y, z);
         super.breakBlock(world, x, y, z, par5, par6);
