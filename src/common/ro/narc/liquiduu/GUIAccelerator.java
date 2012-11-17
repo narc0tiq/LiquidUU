@@ -100,19 +100,16 @@ public class GUIAccelerator extends GuiContainer {
         }
     }
 
-    @Override
     public void drawCenteredString(String s, int x, int y, int color) {
         fontRenderer.drawString(s, x - fontRenderer.getStringWidth(s) / 2, y,
                                 color);
     }
 
-    @Override
     public void drawRightAlignedString(String s, int x, int y, int color) {
         fontRenderer.drawString(s, x - fontRenderer.getStringWidth(s), y,
                                 color);
     }
 
-    @Override
     public void drawOperationCosts(int cost) {
         String[] line1 = String.format("%.3f UUM/operation",  cost / 1000.0F).split("[. ]");
         String[] line2 = String.format("%.3f operations/UUM", 1000.0F / cost).split("[. ]");

@@ -9,7 +9,6 @@ public class LiquidUUTank extends LiquidTank {
         super(capacity);
     }
 
-    @Override
     public int getLiquidAmount() {
         LiquidStack liquid = this.getLiquid();
 
