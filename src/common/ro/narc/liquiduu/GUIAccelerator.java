@@ -67,7 +67,7 @@ public class GUIAccelerator extends GuiContainer {
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer() {
+    protected void drawGuiContainerForegroundLayer(int i, int j) {
         String machineName = "None";
         ItemStack machine = inventorySlots.getSlot(3).getStack();
         if(machine != null) {

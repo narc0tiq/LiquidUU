@@ -51,7 +51,7 @@ public class ContainerAccelerator extends Container {
 
     // I'm guessing par2 = mouseButton and par3 = shiftKeyDown
     @Override
-    public ItemStack slotClick(int slotnum, int par2, boolean par3, EntityPlayer player) {
+    public ItemStack slotClick(int slotnum, int par2, int par3, EntityPlayer player) {
         if(slotnum == 3) {
             return null; // The machine in slot 4 is for display ONLY!
         }
@@ -59,7 +59,7 @@ public class ContainerAccelerator extends Container {
     }
 
     @Override
-    public ItemStack transferStackInSlot(int slotnum) {
+    public ItemStack transferStackInSlot(EntityPlayer player, int slotnum) {
         Slot slot = (Slot)inventorySlots.get(slotnum);
 
         if(slot == null || (!slot.getHasStack())) {
