@@ -69,14 +69,11 @@ public class ContainerAccelerator extends Container {
         ItemStack originalStack = slot.getStack();
         ItemStack workStack = originalStack.copy();
 
-        // Slots 0 and 2 are perfectly normal:
+        // Slots 0, 1 and 2 are perfectly normal:
         if((slotnum == 0) || (slotnum == 2)) {
-            if(!mergeItemStack(workStack, 4, inventorySlots.size(), true)) {
+            if(!mergeItemStack(workStack, 4, inventorySlots.size(), false)) {
                 return null;
             }
-        }
-        else if(slotnum == 1) { // Output slot is special
-            return null; // need to poke the TE to make it operate
         }
         else if(slotnum >= 4) { // From player inventory
             if(accelerator.isItemStackUUM(workStack)) {
@@ -89,6 +86,10 @@ public class ContainerAccelerator extends Container {
                     return null;
                 }
             }
+        }
+
+        if(slotnum == 1) { // Output slot does need to notify the machine.
+            accelerator.getOutput(originalStack.stackSize, true);
         }
 
         if(workStack.stackSize == 0) {
