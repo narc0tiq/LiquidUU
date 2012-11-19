@@ -70,7 +70,7 @@ public class ContainerAccelerator extends Container {
         ItemStack workStack = originalStack.copy();
 
         // Slots 0, 1 and 2 are perfectly normal:
-        if((slotnum == 0) || (slotnum == 2)) {
+        if((slotnum >= 0) && (slotnum <= 2)) {
             if(!mergeItemStack(workStack, 4, inventorySlots.size(), false)) {
                 return null;
             }
