@@ -2,9 +2,9 @@ package ro.narc.liquiduu.integration;
 
 import ro.narc.liquiduu.LiquidUU;
 
-import buildcraft.api.liquids.LiquidStack;
-import buildcraft.api.liquids.LiquidData;
-import buildcraft.api.liquids.LiquidManager;
+import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.liquids.LiquidContainerData;
+import net.minecraftforge.liquids.LiquidContainerRegistry;
 import buildcraft.api.recipes.RefineryRecipe;
 
 import forestry.api.core.ItemInterface;
@@ -35,8 +35,8 @@ public class Forestry {
 
     @SuppressWarnings("unchecked")
     public static void initBuildcraftLiquids(ItemStack canEmpty) {
-        LiquidData cannedUUData = new LiquidData(LiquidUU.liquidUUStack, LiquidUU.cannedUU, canEmpty);
-        LiquidManager.liquids.add(cannedUUData);
+        LiquidContainerData cannedUUData = new LiquidContainerData(LiquidUU.liquidUUStack, LiquidUU.cannedUU, canEmpty);
+        LiquidContainerRegistry.registerLiquid(cannedUUData);
     }
 
     public static void initRefineryRecipes() {

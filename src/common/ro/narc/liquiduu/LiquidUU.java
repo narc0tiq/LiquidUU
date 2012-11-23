@@ -19,9 +19,9 @@ import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.Property;
 
-import buildcraft.api.liquids.LiquidData;
-import buildcraft.api.liquids.LiquidManager;
-import buildcraft.api.liquids.LiquidStack;
+import net.minecraftforge.liquids.LiquidContainerData;
+import net.minecraftforge.liquids.LiquidContainerRegistry;
+import net.minecraftforge.liquids.LiquidStack;
 import buildcraft.api.recipes.RefineryRecipe;
 import buildcraft.BuildCraftEnergy;
 import buildcraft.BuildCraftFactory;
@@ -131,9 +131,9 @@ public class LiquidUU {
     @SuppressWarnings("unchecked")
     private static void initLiquidData() {
         liquidUUStack = new LiquidStack(liquidUU.getItem(), 1000);
-        LiquidData liquidUUData = new LiquidData(liquidUUStack, Ic2Items.matter,
+        LiquidContainerData liquidUUData = new LiquidContainerData(liquidUUStack, Ic2Items.matter,
                 Ic2Items.cell);
-        LiquidManager.liquids.add(liquidUUData);
+        LiquidContainerRegistry.registerLiquid(liquidUUData);
     }
 
     public static Side getSide() {

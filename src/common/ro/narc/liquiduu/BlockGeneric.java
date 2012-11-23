@@ -161,7 +161,7 @@ public class BlockGeneric extends BlockContainer {
 
         if(eventID == EID_FACING) {
             ((TileEntityAccelerator)te).setFacing((short)value);
-            world.markBlockNeedsUpdate(x, y, z);
+            world.markBlockForUpdate(x, y, z);
         }
     }
 

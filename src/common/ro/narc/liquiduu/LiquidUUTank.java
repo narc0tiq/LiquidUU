@@ -1,7 +1,7 @@
 package ro.narc.liquiduu;
 
-import buildcraft.api.liquids.LiquidStack;
-import buildcraft.api.liquids.LiquidTank;
+import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.liquids.LiquidTank;
 
 
 public class LiquidUUTank extends LiquidTank {

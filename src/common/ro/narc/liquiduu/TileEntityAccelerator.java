@@ -20,11 +20,11 @@ import ic2.common.TileEntityMachine;
 import ic2.common.TileEntityElectricMachine;
 import ic2.common.TileEntityRecycler;
 
-import buildcraft.api.core.Orientations;
-import buildcraft.api.liquids.ILiquidTank;
-import buildcraft.api.liquids.ITankContainer;
-import buildcraft.api.liquids.LiquidManager;
-import buildcraft.api.liquids.LiquidStack;
+import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.liquids.ILiquidTank;
+import net.minecraftforge.liquids.ITankContainer;
+import net.minecraftforge.liquids.LiquidStack;
+
 import buildcraft.api.inventory.ISpecialInventory;
 
 public class TileEntityAccelerator extends TileEntity implements IWrenchable, ISpecialInventory, ITankContainer, IInventory {
@@ -469,7 +469,7 @@ public class TileEntityAccelerator extends TileEntity implements IWrenchable, IS
     }
 
 // public interface ISpecialInventory extends IInventory {
-    public synchronized int addItem(ItemStack stack, boolean wetRun, Orientations side) {
+    public synchronized int addItem(ItemStack stack, boolean wetRun, ForgeDirection side) {
         if(isItemStackUUM(stack)) {
             return addToInventorySlot(2, stack, wetRun);
         }
@@ -477,7 +477,7 @@ public class TileEntityAccelerator extends TileEntity implements IWrenchable, IS
         return addToInventorySlot(0, stack, wetRun);
     }
 
-    public ItemStack[] extractItem(boolean wetRun, Orientations side, int amount) {
+    public ItemStack[] extractItem(boolean wetRun, ForgeDirection side, int amount) {
         ItemStack out = getOutput(amount, wetRun);
 
         return new ItemStack[]{out};
@@ -485,7 +485,7 @@ public class TileEntityAccelerator extends TileEntity implements IWrenchable, IS
 // }
 
 // public interface ITankContainer {
-    public int fill(Orientations side, LiquidStack resource, boolean wetRun) {
+    public int fill(ForgeDirection side, LiquidStack resource, boolean wetRun) {
         return fill(0, resource, wetRun);
     }
 
@@ -497,7 +497,7 @@ public class TileEntityAccelerator extends TileEntity implements IWrenchable, IS
         return tank.fill(resource, wetRun);
     }
 
-    public LiquidStack drain(Orientations side, int amount, boolean wetRun) {
+    public LiquidStack drain(ForgeDirection side, int amount, boolean wetRun) {
         return null; // No, you may not have my UUM!
     }
 
@@ -505,7 +505,15 @@ public class TileEntityAccelerator extends TileEntity implements IWrenchable, IS
         return null;
     }
 
-    public ILiquidTank[] getTanks() {
+    public ILiquidTank getTank(ForgeDirection side, LiquidStack liquid) {
+        if(liquid.isLiquidEqual(LiquidUU.liquidUUStack)) {
+            return tank;
+        }
+
+        return null;
+    }
+
+    public ILiquidTank[] getTanks(ForgeDirection side) {
         return new ILiquidTank[]{tank};
     }
 //} // interface ITankContainer
@@ -528,7 +536,7 @@ public class TileEntityAccelerator extends TileEntity implements IWrenchable, IS
     }
 
     public void sendGUINetworkData(ContainerAccelerator container, ICrafting iCrafting) {
-        iCrafting.updateCraftingInventoryInfo(container, 0, tank.getLiquidAmount());
+        iCrafting.sendProgressBarUpdate(container, 0, tank.getLiquidAmount());
     }
 
     @Override
