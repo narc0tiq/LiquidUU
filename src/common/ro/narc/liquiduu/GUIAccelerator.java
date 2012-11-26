@@ -1,5 +1,7 @@
 package ro.narc.liquiduu;
 
+import java.text.DecimalFormatSymbols;
+
 import net.minecraftforge.client.ForgeHooksClient;
 
 import net.minecraft.src.GuiContainer;
@@ -111,8 +113,11 @@ public class GUIAccelerator extends GuiContainer {
     }
 
     public void drawOperationCosts(int cost) {
-        String[] line1 = String.format("%.3f UUM/operation",  cost / 1000.0F).split("[. ]");
-        String[] line2 = String.format("%.3f operations/UUM", 1000.0F / cost).split("[. ]");
+        String decimalSeparator = DecimalFormatSymbols.getInstance().getDecimalSeparator() + "";
+
+        String splitStr = "[ " + decimalSeparator + "]";
+        String[] line1 = String.format("%.3f UUM/operation",  cost / 1000.0F).split(splitStr);
+        String[] line2 = String.format("%.3f operations/UUM", 1000.0F / cost).split(splitStr);
 
         int topWidths[] = new int[3];
         int botWidths[] = new int[3];
@@ -122,7 +127,7 @@ public class GUIAccelerator extends GuiContainer {
             botWidths[i] = fontRenderer.getStringWidth(line2[i]);
         }
 
-        int dotWidth = fontRenderer.getStringWidth(".");
+        int dotWidth = fontRenderer.getStringWidth(decimalSeparator);
         int spaceWidth = fontRenderer.getStringWidth(" ");
 
         int offsets[] = new int[3];
@@ -137,8 +142,8 @@ public class GUIAccelerator extends GuiContainer {
 
         rightAlign -= offsets[1];
 
-        fontRenderer.drawString("." + line1[1], rightAlign, bottom-17, 0x404040);
-        fontRenderer.drawString("." + line2[1], rightAlign, bottom-8,  0x404040);
+        fontRenderer.drawString(decimalSeparator + line1[1], rightAlign, bottom-17, 0x404040);
+        fontRenderer.drawString(decimalSeparator + line2[1], rightAlign, bottom-8,  0x404040);
 
         fontRenderer.drawString(line1[0], rightAlign - topWidths[0], bottom-17, 0x404040);
         fontRenderer.drawString(line2[0], rightAlign - botWidths[0], bottom-8,  0x404040);
