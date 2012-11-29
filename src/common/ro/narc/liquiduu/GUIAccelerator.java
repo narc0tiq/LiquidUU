@@ -19,9 +19,6 @@ public class GUIAccelerator extends GuiContainer {
     public static final int BORDER = 4;
     public int main_width, main_height, left, top, center, middle, right, bottom;
 
-    public int mouseX = -1;
-    public int mouseY = -1;
-
     TileEntityAccelerator accelerator;
 
     public GUIAccelerator(InventoryPlayer inventory, TileEntityAccelerator accelerator) {
@@ -69,7 +66,11 @@ public class GUIAccelerator extends GuiContainer {
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(int i, int j) {
+    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+        // Easier to work with these when localized to the GUI proper.
+        mouseX -= guiLeft;
+        mouseY -= guiTop;
+
         String machineName = "None";
         ItemStack machine = inventorySlots.getSlot(3).getStack();
         if(machine != null) {
@@ -88,7 +89,7 @@ public class GUIAccelerator extends GuiContainer {
         fontRenderer.drawString("Inventory", left + 4, bottom + 2, 0x404040);
 
         if((mouseX >= 152) && (mouseX < 168) &&
-           (mouseY >= 29) && (mouseY < 76)) {
+           (mouseY >=  29) && (mouseY <  76)) {
             String line1 = String.format("%.3f UUM stored",
                     (float) uumAmount / 1000.0F);
             String line2 = "";
@@ -200,14 +201,5 @@ public class GUIAccelerator extends GuiContainer {
         itemRenderer.zLevel = 0.0F;
         GL11.glEnable(GL11.GL_LIGHTING);
         RenderHelper.enableGUIStandardItemLighting();
-    }
-
-    // And because we need mouseX and mouseY and nobody seems to be keeping track of them...
-    @Override
-    protected void mouseMovedOrUp(int x, int y, int button) {
-        super.mouseMovedOrUp(x, y, button);
-
-        mouseX = x - guiLeft;
-        mouseY = y - guiTop;
     }
 }
