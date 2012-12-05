@@ -126,6 +126,7 @@ public class LiquidUU {
     public void postInit(FMLPostInitializationEvent event) {
         loadIntegration("Forestry");
         loadIntegration("NEI");
+        loadIntegration("ThermalExpansion");
     }
 
     @SuppressWarnings("unchecked")
