@@ -12,6 +12,7 @@ import forestry.api.recipes.RecipeManagers;
 
 import ic2.common.Ic2Items;
 
+import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 
@@ -20,6 +21,7 @@ public class Forestry {
 
         ItemStack canEmpty = ItemInterface.getItem("canEmpty");
         ItemStack ingotTin = ItemInterface.getItem("ingotTin");
+        LiquidUU.cannedUU.getItem().setCreativeTab(CreativeTabs.tabMisc);
 
         RecipeManagers.squeezerManager.addRecipe(5, new ItemStack[]{Ic2Items.matter}, LiquidUU.liquidUUStack);
         RecipeManagers.squeezerManager.addRecipe(5, new ItemStack[]{LiquidUU.cannedUU}, LiquidUU.liquidUUStack, ingotTin, 5);
