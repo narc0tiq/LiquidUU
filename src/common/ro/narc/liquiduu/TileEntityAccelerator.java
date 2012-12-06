@@ -276,6 +276,7 @@ public class TileEntityAccelerator extends TileEntity implements IWrenchable, IS
 
         InstantRecipe recipe = null;
 
+        System.out.println("Side: " + LiquidUU.getSide() + " Input stack: " + inventory[0]);
         if(inventory[0] == null) {
             return null;
         }

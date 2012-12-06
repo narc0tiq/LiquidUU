@@ -81,6 +81,14 @@ public class GUIAccelerator extends GuiContainer {
         drawCenteredString("Connected Machine", 70, top + 12, 0x404040);
         drawCenteredString(machineName,         70, top + 38, 0x404040);
 
+        ((ContainerAccelerator)inventorySlots).updateOutputSlot();
+        Slot outputSlot = inventorySlots.getSlot(1);
+        ItemStack output = outputSlot.getStack();
+        if(output == null) { // "Unknown or no output" icon
+            drawCenteredString("??", outputSlot.xDisplayPosition + 8,
+                                     outputSlot.yDisplayPosition + 4, 0x404040);
+        }
+
         int uumAmount = accelerator.tank.getLiquidAmount();
         int operationCost = accelerator.getOperationCost();
         if(operationCost > 0) {

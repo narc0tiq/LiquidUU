@@ -116,4 +116,17 @@ public class ContainerAccelerator extends Container {
     public void updateProgressBar(int key, int value) {
         accelerator.getGUINetworkData(key, value);
     }
+
+    public void updateOutputSlot() {
+        SlotOutput outputSlot = (SlotOutput)inventorySlots.get(1);
+        InstantRecipe recipe = accelerator.getActiveRecipe();
+        if(recipe != null) {
+            if(recipe.display == null) {
+                outputSlot.displayStack = null;
+            }
+            else {
+                outputSlot.displayStack = recipe.display.copy();
+            }
+        }
+    }
 }
