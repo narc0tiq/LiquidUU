@@ -95,9 +95,16 @@ public class ContainerAccelerator extends Container {
         if(workStack.stackSize == 0) {
             slot.putStack(null);
         }
+        else if(workStack.stackSize == originalStack.stackSize) {
+            return null;
+        }
         else {
+            slot.putStack(workStack);
+
             slot.onSlotChanged();
         }
+
+        slot.onPickupFromSlot(player, workStack);
 
         return originalStack;
     }
