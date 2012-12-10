@@ -21,6 +21,7 @@ import net.minecraftforge.common.Property;
 
 import net.minecraftforge.liquids.LiquidContainerData;
 import net.minecraftforge.liquids.LiquidContainerRegistry;
+import net.minecraftforge.liquids.LiquidDictionary;
 import net.minecraftforge.liquids.LiquidStack;
 import buildcraft.api.recipes.RefineryRecipe;
 import buildcraft.BuildCraftEnergy;
@@ -133,6 +134,7 @@ public class LiquidUU {
     @SuppressWarnings("unchecked")
     private static void initLiquidData() {
         liquidUUStack = new LiquidStack(liquidUU.getItem(), 1000);
+        liquidUUStack = LiquidDictionary.getOrCreateLiquid("liquidUU", liquidUUStack);
         LiquidContainerData liquidUUData = new LiquidContainerData(liquidUUStack, Ic2Items.matter,
                 Ic2Items.cell);
         LiquidContainerRegistry.registerLiquid(liquidUUData);
