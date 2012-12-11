@@ -50,6 +50,10 @@ public class TileEntityAccelerator extends TileEntity implements IWrenchable, IS
         this.blockType = LiquidUU.liquidUUBlock;
         this.tank = new LiquidUUTank(2000);
 
+        characterize();
+    }
+
+    public void characterize() {
         character[0] = random.nextInt(6000) + 2000;
         character[1] = random.nextInt(character[0]);
         character[2] = random.nextInt(6);
