@@ -7,9 +7,12 @@ import buildcraft.core.render.TextureLiquidsFX;
 import net.minecraftforge.client.MinecraftForgeClient;
 
 import net.minecraft.src.Item;
+import net.minecraft.src.TileEntityRenderer;
 
 public class ClientProxy extends CommonProxy {
+    public TextureLiquidsFX liquidUUFX=null;
     @Override
+    @SuppressWarnings("unchecked")
     public void init() {
         MinecraftForgeClient.preloadTexture("/liquiduu-gfx/blocks.png");
         MinecraftForgeClient.preloadTexture("/liquiduu-gfx/items.png");
@@ -19,10 +22,13 @@ public class ClientProxy extends CommonProxy {
         LanguageRegistry.addName(LiquidUU.liquidUUBlock, "Uninitialized LiquidUU block");
         LanguageRegistry.addName(LiquidUU.accelerator, "Accelerator");
 
-        TextureLiquidsFX liquidUUFX = new TextureLiquidsFX(140, 210, 40, 80, 140, 210, 
+        liquidUUFX = new TextureLiquidsFX(140, 210, 40, 80, 140, 210, 
                 LiquidUU.liquidUU.getItem().getIconFromDamage(0), 
                 LiquidUU.liquidUU.getItem().getTextureFile());
         liquidUUFX.tileImage = 3595;
         TextureFXManager.instance().addAnimation(liquidUUFX);
+
+        TileEntityRenderer.instance.specialRendererMap.put(
+               TileEntityAccelerator.class, new RenderAccelerator());
     }
 }

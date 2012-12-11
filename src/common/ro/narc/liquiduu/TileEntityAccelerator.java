@@ -25,6 +25,8 @@ import net.minecraftforge.liquids.ILiquidTank;
 import net.minecraftforge.liquids.ITankContainer;
 import net.minecraftforge.liquids.LiquidStack;
 
+import java.util.Random;
+
 import buildcraft.api.inventory.ISpecialInventory;
 
 public class TileEntityAccelerator extends TileEntity implements IWrenchable, ISpecialInventory, ITankContainer, IInventory {
@@ -32,6 +34,11 @@ public class TileEntityAccelerator extends TileEntity implements IWrenchable, IS
     public short prevFacing;
 
     public boolean initialized = false;
+
+    public static Random random = new Random();
+
+    // (phase length, phase offset, spin axis, texture offset)
+    public int[] character = new int[4];
 
     public LiquidUUTank tank;
 
@@ -42,6 +49,11 @@ public class TileEntityAccelerator extends TileEntity implements IWrenchable, IS
 
         this.blockType = LiquidUU.liquidUUBlock;
         this.tank = new LiquidUUTank(2000);
+
+        character[0] = random.nextInt(6000) + 2000;
+        character[1] = random.nextInt(character[0]);
+        character[2] = random.nextInt(6);
+        character[3] = random.nextInt(225);
     }
 
     @Override
