@@ -28,6 +28,7 @@ public class BlockGeneric extends BlockContainer {
 
     public BlockGeneric(int id, Material material) {
         super(id, material);
+        this.setBlockName("liquiduu.block.generic");
         this.setHardness(2.0F);
     }
 
