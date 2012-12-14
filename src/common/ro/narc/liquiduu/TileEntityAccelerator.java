@@ -148,6 +148,10 @@ public class TileEntityAccelerator extends TileEntity implements IWrenchable, IS
         return 1.0F;
     }
 
+    public ItemStack getWrenchDrop(EntityPlayer player) {
+        return LiquidUU.accelerator.copy();
+    }
+
     public boolean isItemStackUUM(ItemStack stack) {
         return stack.isItemEqual(Ic2Items.matter) || stack.isItemEqual(LiquidUU.cannedUU);
     }
