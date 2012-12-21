@@ -1,7 +1,7 @@
 package ro.narc.liquiduu;
 
-import net.minecraft.src.ItemBlock;
-import net.minecraft.src.ItemStack;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 
 public class ItemGenericBlock extends ItemBlock {
     public ItemGenericBlock(int i) {

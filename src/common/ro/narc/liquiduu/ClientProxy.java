@@ -6,7 +6,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import buildcraft.core.render.TextureLiquidsFX;
 import net.minecraftforge.client.MinecraftForgeClient;
 
-import net.minecraft.src.Item;
+import net.minecraft.item.Item;
 
 public class ClientProxy extends CommonProxy {
     @Override

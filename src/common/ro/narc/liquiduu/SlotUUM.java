@@ -1,10 +1,10 @@
 package ro.narc.liquiduu;
 
-import net.minecraft.src.IInventory;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.Slot;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
-import ic2.common.Ic2Items;
+import ic2.core.Ic2Items;
 
 public class SlotUUM extends Slot {
     public SlotUUM(IInventory inventory, int slotIndex, int xPos, int yPos) {
