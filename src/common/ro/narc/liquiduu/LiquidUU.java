@@ -90,7 +90,7 @@ public class LiquidUU {
 
         liquidUUBlock = new BlockGeneric(accelBlockID.getInt(1300));
         liquidUUBlock.setCreativeTab(ic2.core.IC2.tabIC2);
-        GameRegistry.registerBlock(liquidUUBlock, ItemGenericBlock.class, liquidUUBlock.getBlockName(), "liquidUU");
+        GameRegistry.registerBlock(liquidUUBlock, ItemGenericBlock.class, liquidUUBlock.getBlockName());
         GameRegistry.registerTileEntity(TileEntityAccelerator.class, "Accelerator");
         accelerator = new ItemStack(liquidUUBlock, 1, BlockGeneric.DATA_ACCELERATOR);
 

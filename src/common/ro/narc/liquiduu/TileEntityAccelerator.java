@@ -510,7 +510,7 @@ public class TileEntityAccelerator extends TileEntity implements IWrenchable, IS
     }
 
     public ILiquidTank getTank(ForgeDirection side, LiquidStack liquid) {
-        if(liquid.isLiquidEqual(LiquidUU.liquidUUStack)) {
+        if(LiquidUU.liquidUUStack.isLiquidEqual(liquid)) {
             return tank;
         }
 
