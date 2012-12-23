@@ -191,6 +191,7 @@ public class LiquidUU {
         }
         catch (Throwable e) {
             System.out.println("LiquidUU: Did not load " + name + " integration: " + e);
+            e.printStackTrace();
             return false;
         }
     }

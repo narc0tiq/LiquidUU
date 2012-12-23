@@ -2,7 +2,7 @@ package ro.narc.liquiduu.integration;
 
 import ro.narc.liquiduu.LiquidUU;
 
-import ic2.common.Ic2Items;
+import ic2.core.Ic2Items;
 
 import thermalexpansion.api.crafting.CraftingManagers;
 
