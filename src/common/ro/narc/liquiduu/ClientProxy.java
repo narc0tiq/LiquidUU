@@ -16,13 +16,20 @@ public class ClientProxy extends CommonProxy {
 
         LanguageRegistry.addName(LiquidUU.liquidUU.getItem(), "Liquid UU-Matter");
         LanguageRegistry.addName(LiquidUU.cannedUU.getItem(), "UU-Matter Can");
+        LanguageRegistry.addName(LiquidUU.electrolyzedWater.getItem(), "Electrolyzed Water");
         LanguageRegistry.addName(LiquidUU.liquidUUBlock, "Uninitialized LiquidUU block");
         LanguageRegistry.addName(LiquidUU.accelerator, "Accelerator");
 
-        TextureLiquidsFX liquidUUFX = new TextureLiquidsFX(140, 210, 40, 80, 140, 210, 
-                LiquidUU.liquidUU.getItem().getIconFromDamage(0), 
+        TextureLiquidsFX liquidUUFX = new TextureLiquidsFX(140, 210, 40, 80, 140, 210,
+                LiquidUU.liquidUU.getItem().getIconFromDamage(0),
                 LiquidUU.liquidUU.getItem().getTextureFile());
         liquidUUFX.tileImage = 3595;
         TextureFXManager.instance().addAnimation(liquidUUFX);
+
+        TextureFXElectrolyzed electricWaterFX = new TextureFXElectrolyzed(93, 138, 136, 202, 158, 234,
+                LiquidUU.electrolyzedWater.getItem().getIconFromDamage(0),
+                LiquidUU.electrolyzedWater.getItem().getTextureFile());
+        electricWaterFX.tileImage = 3596;
+        TextureFXManager.instance().addAnimation(electricWaterFX);
     }
 }

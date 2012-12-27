@@ -48,6 +48,8 @@ public class LiquidUU {
     public static Block liquidUUBlock;
     public static ItemStack accelerator;
     public static LiquidStack liquidUUStack;
+    public static ItemStack electrolyzedWater;
+    public static LiquidStack electrolyzedWaterStack;
 
     @Mod.Instance("LiquidUU")
     public static LiquidUU instance;
@@ -73,20 +75,17 @@ public class LiquidUU {
         Property accelBlockID = config.getBlock("accelerator", 1300);
         Property liquidItemID = config.getItem("liquid.uu", 21001);
         Property cannedItemID = config.getItem("canned.uu", 21002);
-        //config.addCustomCategoryComment("general", "This might be useful later.");
+        Property electricWaterID = config.getItem("electricWater", 21003);
         config.save();
 
-        Item liquidUUItem = new ItemGeneric(liquidItemID.getInt(21001));
-        liquidUUItem.setItemName("liquidUU");
-        liquidUUItem.setIconIndex(0);
-        liquidUUItem.setTextureFile("/liquiduu-gfx/items.png");
+        Item liquidUUItem = new ItemGeneric("liquidUU", 0, liquidItemID.getInt(21001));
         liquidUU = new ItemStack(liquidUUItem, 1);
 
-        Item cannedUUItem = new ItemGeneric(cannedItemID.getInt(21002));
-        cannedUUItem.setItemName("cannedUU");
-        cannedUUItem.setIconIndex(1);
-        cannedUUItem.setTextureFile("/liquiduu-gfx/items.png");
+        Item cannedUUItem = new ItemGeneric("cannedUU", 1, cannedItemID.getInt(21002));
         cannedUU = new ItemStack(cannedUUItem, 1);
+
+        Item liquidElectrolyzedWaterItem = new ItemGeneric("electricWater", 2, electricWaterID.getInt(21003));
+        electrolyzedWater = new ItemStack(liquidElectrolyzedWaterItem, 1);
 
         liquidUUBlock = new BlockGeneric(accelBlockID.getInt(1300));
         liquidUUBlock.setCreativeTab(ic2.core.IC2.tabIC2);
@@ -138,6 +137,12 @@ public class LiquidUU {
         LiquidContainerData liquidUUData = new LiquidContainerData(liquidUUStack, Ic2Items.matter,
                 Ic2Items.cell);
         LiquidContainerRegistry.registerLiquid(liquidUUData);
+
+        electrolyzedWaterStack = new LiquidStack(electrolyzedWater.getItem(), 1000);
+        electrolyzedWaterStack = LiquidDictionary.getOrCreateLiquid("electrolyzedWater", electrolyzedWaterStack);
+        LiquidContainerData electricWaterData = new LiquidContainerData(electrolyzedWaterStack,
+                Ic2Items.electrolyzedWaterCell, Ic2Items.cell);
+        LiquidContainerRegistry.registerLiquid(electricWaterData);
     }
 
     public static Side getSide() {
