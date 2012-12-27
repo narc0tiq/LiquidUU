@@ -4,13 +4,13 @@ import java.text.DecimalFormatSymbols;
 
 import net.minecraftforge.client.ForgeHooksClient;
 
-import net.minecraft.src.GuiContainer;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.InventoryPlayer;
-import net.minecraft.src.MathHelper;
-import net.minecraft.src.RenderHelper;
-import net.minecraft.src.Slot;
-import net.minecraft.src.StatCollector;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.inventory.Slot;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;

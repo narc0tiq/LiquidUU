@@ -1,6 +1,6 @@
 package ro.narc.liquiduu;
 
-import net.minecraft.src.ItemStack;
+import net.minecraft.item.ItemStack;
 
 public class InstantRecipe {
     public ItemStack input;

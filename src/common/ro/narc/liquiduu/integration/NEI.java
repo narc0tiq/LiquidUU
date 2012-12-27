@@ -6,8 +6,8 @@ import codechicken.nei.api.API;
 import codechicken.nei.api.INEIGuiHandler;
 import codechicken.nei.VisiblityData;
 
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.GuiContainer;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.item.ItemStack;
 
 import ro.narc.liquiduu.GUIAccelerator;
 

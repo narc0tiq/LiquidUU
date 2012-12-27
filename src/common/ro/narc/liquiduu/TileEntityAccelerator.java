@@ -1,24 +1,24 @@
 package ro.narc.liquiduu;
 
-import cpw.mods.fml.common.Side;
+import cpw.mods.fml.relauncher.Side;
 
-import net.minecraft.src.Block;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.ICrafting;
-import net.minecraft.src.IInventory;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.MathHelper;
-import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.NBTTagList;
-import net.minecraft.src.Packet;
-import net.minecraft.src.Packet54PlayNoteBlock;
-import net.minecraft.src.TileEntity;
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet54PlayNoteBlock;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
 
 import ic2.api.IWrenchable;
-import ic2.common.Ic2Items;
-import ic2.common.TileEntityMachine;
-import ic2.common.TileEntityElectricMachine;
-import ic2.common.TileEntityRecycler;
+import ic2.core.Ic2Items;
+import ic2.core.block.machine.tileentity.TileEntityMachine;
+import ic2.core.block.machine.tileentity.TileEntityElectricMachine;
+import ic2.core.block.machine.tileentity.TileEntityRecycler;
 
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.ILiquidTank;
@@ -526,7 +526,7 @@ public class TileEntityAccelerator extends TileEntity implements IWrenchable, IS
     }
 
     public ILiquidTank getTank(ForgeDirection side, LiquidStack liquid) {
-        if(liquid.isLiquidEqual(LiquidUU.liquidUUStack)) {
+        if(LiquidUU.liquidUUStack.isLiquidEqual(liquid)) {
             return tank;
         }
 

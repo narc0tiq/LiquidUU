@@ -2,12 +2,12 @@ package ro.narc.liquiduu;
 
 import buildcraft.core.render.TextureLiquidsFX;
 
-import net.minecraft.src.GLAllocation;
-import net.minecraft.src.MathHelper;
-import net.minecraft.src.OpenGlHelper;
-import net.minecraft.src.TileEntity;
-import net.minecraft.src.TileEntitySpecialRenderer;
-import net.minecraft.src.World;
+import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;

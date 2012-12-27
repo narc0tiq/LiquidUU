@@ -10,11 +10,11 @@ import buildcraft.api.recipes.RefineryRecipe;
 import forestry.api.core.ItemInterface;
 import forestry.api.recipes.RecipeManagers;
 
-import ic2.common.Ic2Items;
+import ic2.core.Ic2Items;
 
-import net.minecraft.src.CreativeTabs;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 public class Forestry {
     public static boolean init() {

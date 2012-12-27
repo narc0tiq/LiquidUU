@@ -6,8 +6,8 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import buildcraft.core.render.TextureLiquidsFX;
 import net.minecraftforge.client.MinecraftForgeClient;
 
-import net.minecraft.src.Item;
-import net.minecraft.src.TileEntityRenderer;
+import net.minecraft.item.Item;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 
 public class ClientProxy extends CommonProxy {
     public TextureLiquidsFX liquidUUFX=null;

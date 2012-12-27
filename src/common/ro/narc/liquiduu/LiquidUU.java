@@ -1,7 +1,6 @@
 package ro.narc.liquiduu;
 
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -10,11 +9,12 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
 
-import net.minecraft.src.Block;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.TileEntity;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.Property;
@@ -28,7 +28,7 @@ import buildcraft.BuildCraftEnergy;
 import buildcraft.BuildCraftFactory;
 import buildcraft.BuildCraftTransport;
 
-import ic2.common.Ic2Items;
+import ic2.core.Ic2Items;
 
 @Mod(
         modid="LiquidUU",
@@ -89,8 +89,8 @@ public class LiquidUU {
         cannedUU = new ItemStack(cannedUUItem, 1);
 
         liquidUUBlock = new BlockGeneric(accelBlockID.getInt(1300));
-        liquidUUBlock.setCreativeTab(ic2.common.IC2.tabIC2);
-        GameRegistry.registerBlock(liquidUUBlock, ItemGenericBlock.class);
+        liquidUUBlock.setCreativeTab(ic2.core.IC2.tabIC2);
+        GameRegistry.registerBlock(liquidUUBlock, ItemGenericBlock.class, liquidUUBlock.getBlockName());
         GameRegistry.registerTileEntity(TileEntityAccelerator.class, "Accelerator");
         accelerator = new ItemStack(liquidUUBlock, 1, BlockGeneric.DATA_ACCELERATOR);
 
@@ -191,6 +191,7 @@ public class LiquidUU {
         }
         catch (Throwable e) {
             System.out.println("LiquidUU: Did not load " + name + " integration: " + e);
+            e.printStackTrace();
             return false;
         }
     }

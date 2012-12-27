@@ -1,19 +1,19 @@
 package ro.narc.liquiduu;
 
-import cpw.mods.fml.common.Side;
+import cpw.mods.fml.relauncher.Side;
 
-import net.minecraft.src.BlockContainer;
-import net.minecraft.src.EntityLiving;
-import net.minecraft.src.EntityItem;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.IBlockAccess;
-import net.minecraft.src.IInventory;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.Material;
-import net.minecraft.src.MathHelper;
-import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.TileEntity;
-import net.minecraft.src.World;
+import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 import java.util.Random;
 
@@ -192,18 +192,7 @@ public class BlockGeneric extends BlockContainer {
             float ry = rand.nextFloat() * 0.8F + 0.1F;
             float rz = rand.nextFloat() * 0.8F + 0.1F;
 
-            EntityItem toDrop = new EntityItem(world, x + rx, y + ry, z + rz,
-                    new ItemStack(item.itemID, item.stackSize, item.getItemDamage()));
-
-            if(item.hasTagCompound()) {
-                toDrop.item.setTagCompound((NBTTagCompound) item.getTagCompound().copy());
-            }
-
-            float factor = 0.05F;
-            toDrop.motionX = rand.nextGaussian() * factor;
-            toDrop.motionY = rand.nextGaussian() * factor + 0.2F;
-            toDrop.motionZ = rand.nextGaussian() * factor;
-
+            EntityItem toDrop = new EntityItem(world, x + rx, y + ry, z + rz, item.copy());
             world.spawnEntityInWorld(toDrop);
             item.stackSize = 0;
         }
