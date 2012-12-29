@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class TextureFXElectrolyzed extends TextureLiquidsFX {
     public static Random rand = new Random();
-    public static final byte MAX_SPARK_STEPS = 4;
+    public static final byte MAX_SPARK_STEPS = tileSizeBase/4;
 
     public int sparkX = 0;
     public int sparkY = 0;
@@ -41,9 +41,9 @@ public class TextureFXElectrolyzed extends TextureLiquidsFX {
         boolean zig = sparkLeft;
 
         // A "step" is a diagonal line in the spark zig-zag shape
-        for(int step = 0; step < (2 + rand.nextInt(3)); step++) {
+        for(int step = 0; step < (tileSizeBase/8 + rand.nextInt((3*16)/tileSizeBase)); step++) {
             zig = !zig;
-            for(int i = 0; i < (3 + rand.nextInt(2)); i++) {
+            for(int i = 0; i < ((3*16)/tileSizeBase + rand.nextInt(tileSizeBase/8)); i++) {
                 if(zig) { x += 1; }
                 else    { x -= 1; }
 
