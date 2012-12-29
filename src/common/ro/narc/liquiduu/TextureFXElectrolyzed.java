@@ -6,15 +6,17 @@ import java.util.Random;
 
 public class TextureFXElectrolyzed extends TextureLiquidsFX {
     public static Random rand = new Random();
-    public static final byte MAX_SPARK_STEPS = tileSizeBase/4;
-
+    
+    public final byte MAX_SPARK_STEPS;
     public int sparkX = 0;
     public int sparkY = 0;
     public boolean sparkLeft = true;
-    public byte sparkStep = MAX_SPARK_STEPS;
+    public byte sparkStep;
 
     public TextureFXElectrolyzed(int redMin, int redMax, int greenMin, int greenMax, int blueMin, int blueMax, int spriteIndex, String texture) {
         super(redMin, redMax, greenMin, greenMax, blueMin, blueMax, spriteIndex, texture);
+        MAX_SPARK_STEPS = (byte)(tileSizeBase/4);
+        sparkStep = MAX_SPARK_STEPS;
     }
 
     @Override
