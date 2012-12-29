@@ -4,6 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,14 +16,22 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import java.util.List;
 import java.util.Random;
 
 public class BlockGeneric extends BlockContainer {
-    public static final byte DATA_ACCELERATOR = 0;
+    public static final byte DATA_ACCELERATOR  = 0;
+    public static final byte DATA_ELECTROLYZER = 1;
 
-    public static final int TI_ACCELERATOR_FACE = 0;
-    public static final int TI_ACCELERATOR_SIDE = 1;
-    public static final int TI_BROKEN = 2;
+    public static final int TI_ACCELERATOR_FRONT  =   0;
+    public static final int TI_ACCELERATOR_SIDE   =   1;
+    public static final int TI_ELECTROLYZER_FRONT =  16;
+    public static final int TI_MACHINEFACE_EU_IN  =  17;
+    public static final int TI_MACHINEFACE_EU_OUT =  18;
+    public static final int TI_MACHINEFACE_WATER  =  19;
+    public static final int TI_MACHINEFACE_EWATER =  20;
+    public static final int TI_MACHINEFACE_NONE   =  21;
+    public static final int TI_BROKEN             = 255;
 
     public static final int EID_FACING = 0;
 
@@ -34,6 +43,17 @@ public class BlockGeneric extends BlockContainer {
 
     public BlockGeneric(int id) {
         this(id, Material.iron);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void getSubBlocks(int id, CreativeTabs tab, List tabContents) {
+        if(!tabContents.contains(LiquidUU.accelerator)) {
+            tabContents.add(LiquidUU.accelerator);
+        }
+        if(!tabContents.contains(LiquidUU.electrolyzer)) {
+            tabContents.add(LiquidUU.electrolyzer);
+        }
     }
 
     @Override
@@ -51,6 +71,9 @@ public class BlockGeneric extends BlockContainer {
         if(data == DATA_ACCELERATOR) {
             return new TileEntityAccelerator();
         }
+        else if(data == DATA_ELECTROLYZER) {
+            return new TileEntityElectrolyzer();
+        }
 
         return null;
     }
@@ -59,12 +82,14 @@ public class BlockGeneric extends BlockContainer {
     public int getBlockTexture(IBlockAccess world, int x, int y, int z, int side) {
         TileEntity te = world.getBlockTileEntity(x, y, z);
 
-        if(te instanceof TileEntityAccelerator) {
-            if(side == ((TileEntityAccelerator)te).getFacing()) {
-                return TI_ACCELERATOR_FACE;
+        if(te instanceof IHasMachineFaces) {
+            MachineFace mf = ((IHasMachineFaces)te).getMachineFace(side);
+
+            if(mf != null) {
+                return mf.textureIndex;
             }
             else {
-                return TI_ACCELERATOR_SIDE;
+                return TI_BROKEN;
             }
         }
 
@@ -74,14 +99,17 @@ public class BlockGeneric extends BlockContainer {
     @Override
     public int getBlockTextureFromSideAndMetadata(int side, int data) {
         if(data == DATA_ACCELERATOR) {
-            if(side == 3) {
-                return TI_ACCELERATOR_FACE;
-            }
+            if(side == 3) { return MachineFace.AcceleratorFront.textureIndex; }
 
-            return TI_ACCELERATOR_SIDE;
+            return MachineFace.AcceleratorSide.textureIndex;
+        }
+        else if(data == DATA_ELECTROLYZER) {
+            if(side == 3) { return MachineFace.ElectrolyzerFront.textureIndex; }
+
+            return MachineFace.None.textureIndex;
         }
 
-        return 2;
+        return TI_BROKEN;
     }
 
     @Override

@@ -44,10 +44,11 @@ public class LiquidUU {
     public static boolean DEBUG_NETWORK = false;
 
     public static ItemStack liquidUU;
+    public static LiquidStack liquidUUStack;
     public static ItemStack cannedUU;
     public static Block liquidUUBlock;
     public static ItemStack accelerator;
-    public static LiquidStack liquidUUStack;
+    public static ItemStack electrolyzer;
     public static ItemStack electrolyzedWater;
     public static LiquidStack electrolyzedWaterStack;
 
@@ -91,7 +92,9 @@ public class LiquidUU {
         liquidUUBlock.setCreativeTab(ic2.core.IC2.tabIC2);
         GameRegistry.registerBlock(liquidUUBlock, ItemGenericBlock.class, liquidUUBlock.getBlockName());
         GameRegistry.registerTileEntity(TileEntityAccelerator.class, "Accelerator");
-        accelerator = new ItemStack(liquidUUBlock, 1, BlockGeneric.DATA_ACCELERATOR);
+        GameRegistry.registerTileEntity(TileEntityElectrolyzer.class, "liquiduu.Electrolyzer");
+        accelerator  = new ItemStack(liquidUUBlock, 1, BlockGeneric.DATA_ACCELERATOR);
+        electrolyzer = new ItemStack(liquidUUBlock, 1, BlockGeneric.DATA_ELECTROLYZER);
 
         GameRegistry.addRecipe(accelerator, "TH", "SA", " w",
                 Character.valueOf('T'), BuildCraftFactory.tankBlock,

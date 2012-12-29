@@ -27,7 +27,7 @@ import net.minecraftforge.liquids.LiquidStack;
 
 import buildcraft.api.inventory.ISpecialInventory;
 
-public class TileEntityAccelerator extends TileEntity implements IWrenchable, ISpecialInventory, ITankContainer, IInventory {
+public class TileEntityAccelerator extends TileEntity implements IWrenchable, ISpecialInventory, ITankContainer, IInventory, IHasMachineFaces {
     public short facing;
     public short prevFacing;
 
@@ -521,6 +521,16 @@ public class TileEntityAccelerator extends TileEntity implements IWrenchable, IS
         return new ILiquidTank[]{tank};
     }
 //} // interface ITankContainer
+
+// public interface IHasMachineFaces {
+    public MachineFace getMachineFace(int side) {
+        if(side == facing) {
+            return MachineFace.AcceleratorFront;
+        }
+
+        return MachineFace.AcceleratorSide;
+    }
+//}
 
     public void getGUINetworkData(int key, int value) {
         switch(key) {
