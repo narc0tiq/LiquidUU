@@ -1,6 +1,18 @@
 package ro.narc.liquiduu;
 
+import buildcraft.api.inventory.ISpecialInventory;
+
 import cpw.mods.fml.relauncher.Side;
+
+import ic2.api.IWrenchable;
+import ic2.core.Ic2Items;
+import ic2.core.block.machine.tileentity.TileEntityMachine;
+import ic2.core.block.machine.tileentity.TileEntityElectricMachine;
+import ic2.core.block.machine.tileentity.TileEntityRecycler;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,20 +26,12 @@ import net.minecraft.network.packet.Packet54PlayNoteBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 
-import ic2.api.IWrenchable;
-import ic2.core.Ic2Items;
-import ic2.core.block.machine.tileentity.TileEntityMachine;
-import ic2.core.block.machine.tileentity.TileEntityElectricMachine;
-import ic2.core.block.machine.tileentity.TileEntityRecycler;
-
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.ILiquidTank;
 import net.minecraftforge.liquids.ITankContainer;
 import net.minecraftforge.liquids.LiquidStack;
 
-import buildcraft.api.inventory.ISpecialInventory;
-
-public class TileEntityAccelerator extends TileEntity implements IWrenchable, ISpecialInventory, ITankContainer, IInventory, IHasMachineFaces {
+public class TileEntityAccelerator extends TileEntityLiquidUU implements IWrenchable, ISpecialInventory, ITankContainer, IInventory, IHasMachineFaces {
     public short facing;
     public short prevFacing;
 
@@ -64,11 +68,6 @@ public class TileEntityAccelerator extends TileEntity implements IWrenchable, IS
 
     public void initialize() {
         initialized = true;
-    }
-
-    @Override
-    public Packet getDescriptionPacket() {
-        return new Packet54PlayNoteBlock(xCoord, yCoord, zCoord, LiquidUU.liquidUUBlock.blockID, BlockGeneric.EID_FACING, facing);
     }
 
     /* Facings: YNeg=0; YPos=1; ZNeg=2; ZPos=3; XNeg=4; XPos=5 */
@@ -551,6 +550,17 @@ public class TileEntityAccelerator extends TileEntity implements IWrenchable, IS
 
     public void sendGUINetworkData(ContainerAccelerator container, ICrafting iCrafting) {
         iCrafting.sendProgressBarUpdate(container, 0, tank.getLiquidAmount());
+    }
+
+    @Override
+    public void readFromNetwork(DataInput data) throws IOException {
+        prevFacing = facing = data.readByte();
+        worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
+    }
+
+    @Override
+    public void writeToNetwork(DataOutput data) throws IOException {
+        data.writeByte(facing);
     }
 
     @Override

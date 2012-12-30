@@ -34,12 +34,14 @@ import ic2.core.Ic2Items;
         modid="LiquidUU",
         version="%conf:VERSION%",
         useMetadata=true,
-        dependencies="required-after:IC2;required-after:BuildCraft|Transport;required-after:BuildCraft|Energy;required-after:BuildCraft|Factory;after:Forestry"
-    )
+        dependencies="required-after:IC2;required-after:BuildCraft|Transport;required-after:BuildCraft|Energy;required-after:BuildCraft|Factory;after:Forestry;after:ThermalExpansion|Factory"
+)
 @NetworkMod(
         clientSideRequired = true,
-        versionBounds = "%conf:VERSION_BOUNDS%"
-    )
+        versionBounds = "%conf:VERSION_BOUNDS%",
+        channels = { PacketHandler.CHANNEL_NAME },
+        packetHandler = PacketHandler.class
+)
 public class LiquidUU {
     public static boolean DEBUG_NETWORK = false;
 

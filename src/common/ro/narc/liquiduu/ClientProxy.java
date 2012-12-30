@@ -1,11 +1,14 @@
 package ro.narc.liquiduu;
 
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.TextureFXManager;
 
 import buildcraft.core.render.TextureLiquidsFX;
-import net.minecraftforge.client.MinecraftForgeClient;
 
 import net.minecraft.item.Item;
+import net.minecraft.world.World;
+
+import net.minecraftforge.client.MinecraftForgeClient;
 
 public class ClientProxy extends CommonProxy {
     @Override
@@ -26,5 +29,10 @@ public class ClientProxy extends CommonProxy {
                 LiquidUU.electrolyzedWater.getItem().getTextureFile());
         electricWaterFX.tileImage = 3596;
         TextureFXManager.instance().addAnimation(electricWaterFX);
+    }
+
+    @Override
+    public World getClientWorld() {
+        return FMLClientHandler.instance().getClient().theWorld;
     }
 }

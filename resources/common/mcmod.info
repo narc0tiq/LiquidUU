@@ -1,17 +1,15 @@
-[
-{
+[{
   "modid": "LiquidUU",
   "name": "Liquid UU-Matter",
   "description": "It makes UU-Matter a buildcraft liquid. Liquid UU can duplicate some liquids in the refinery, or you can take it back out again using some empty cells. It can also accelerate certain operations (particularly in IC2 electric machines).",
   "version": "%conf:VERSION%",
-  "mcversion": "1.4.5",
-  "logoFile": "",
-  "url": "",
+  "mcversion": "",
+  "logoFile": "/liquiduu-gfx/logo.png",
+  "url": "http://www.narc.ro/liquid-uu/",
   "updateUrl": "",
   "authors": ["Narc", "FunnyMan3595"],
   "credits": "Thanks to BeardlessBrady for the initial idea.",
   "parent": "",
   "screenshots": [],
   "dependencies": ["IC2", "BuildCraft|Transport", "BuildCraft|Energy", "BuildCraft|Factory"]
-}
-]
+}]

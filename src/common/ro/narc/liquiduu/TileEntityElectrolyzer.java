@@ -2,16 +2,23 @@ package ro.narc.liquiduu;
 
 import cpw.mods.fml.relauncher.Side;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 
 import ic2.api.IWrenchable;
 
-public class TileEntityElectrolyzer extends TileEntity implements IWrenchable, IHasMachineFaces {
-    public short facing;
-    public short prevFacing;
-    public MachineFace[] faces = new MachineFace[6];
+public class TileEntityElectrolyzer extends TileEntityLiquidUU implements IWrenchable, IHasMachineFaces {
+    public short facing = 3;
+    public short prevFacing = 3;
+    public MachineFace[] faces = new MachineFace[] {
+        MachineFace.OutputEU, MachineFace.InputEU,
+        MachineFace.None, MachineFace.ElectrolyzerFront,
+        MachineFace.Water, MachineFace.ElectricWater
+    };
 
     public boolean initialized = false;
 
@@ -21,13 +28,14 @@ public class TileEntityElectrolyzer extends TileEntity implements IWrenchable, I
     }
 
     public void rotateFaces(short prevFront, short newFront) {
-        // TODO: Actually rotate the faces rather than just setting all of them to None except the front.
-        for(int i = 0; i < faces.length; i++) {
-            faces[i] = MachineFace.None;
-        }
-        faces[newFront] = MachineFace.ElectrolyzerFront;
+        MachineFace[] newFaces = new MachineFace[6];
 
-        // TODO: resend description packet, hopefully causing the client to redraw us
+        int[] rotationMatrix = MachineFace.getRotationMatrix(prevFront, newFront);
+
+        for(int i = 0; i < faces.length; i++) {
+            newFaces[i] = faces[rotationMatrix[i]];
+        }
+        this.faces = newFaces;
     }
 
 //public interface IWrenchable {
@@ -53,6 +61,8 @@ public class TileEntityElectrolyzer extends TileEntity implements IWrenchable, I
         if(facing != prevFacing) {
             rotateFaces(prevFacing, facing);
             prevFacing = facing;
+
+            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         }
     }
 
@@ -74,4 +84,20 @@ public class TileEntityElectrolyzer extends TileEntity implements IWrenchable, I
         return faces[side];
     }
 //}
+
+    @Override
+    public void readFromNetwork(DataInput data) throws IOException {
+        for(int i = 0; i < faces.length; i++) {
+            faces[i] = MachineFace.translateOrdinal(data.readByte());
+        }
+    }
+
+    @Override
+    public void writeToNetwork(DataOutput data) throws IOException {
+        for(int i = 0; i < faces.length; i++) {
+            data.writeByte((byte)faces[i].ordinal());
+        }
+    }
+
+    // readFrom and writeTo NBT go here.
 }
