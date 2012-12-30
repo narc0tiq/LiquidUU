@@ -2,6 +2,8 @@ package ro.narc.liquiduu;
 
 import cpw.mods.fml.relauncher.Side;
 
+import ic2.api.IWrenchable;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -9,9 +11,9 @@ import java.io.IOException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-import ic2.api.IWrenchable;
+import ro.narc.util.TileEntityStateful;
 
-public class TileEntityElectrolyzer extends TileEntityLiquidUU implements IWrenchable, IHasMachineFaces {
+public class TileEntityElectrolyzer extends TileEntityStateful implements IWrenchable, IHasMachineFaces {
     public short facing = 3;
     public short prevFacing = 3;
     public MachineFace[] faces = new MachineFace[] {
@@ -25,6 +27,9 @@ public class TileEntityElectrolyzer extends TileEntityLiquidUU implements IWrenc
     public TileEntityElectrolyzer() {
         super();
         this.blockType = LiquidUU.liquidUUBlock;
+
+        this.statePacketID = PacketHandler.PKID_MACHINE_STATE;
+        this.channelName = PacketHandler.CHANNEL_NAME;
     }
 
     public void rotateFaces(short prevFront, short newFront) {
@@ -90,6 +95,7 @@ public class TileEntityElectrolyzer extends TileEntityLiquidUU implements IWrenc
         for(int i = 0; i < faces.length; i++) {
             faces[i] = MachineFace.translateOrdinal(data.readByte());
         }
+        worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
     }
 
     @Override

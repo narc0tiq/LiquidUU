@@ -31,7 +31,9 @@ import net.minecraftforge.liquids.ILiquidTank;
 import net.minecraftforge.liquids.ITankContainer;
 import net.minecraftforge.liquids.LiquidStack;
 
-public class TileEntityAccelerator extends TileEntityLiquidUU implements IWrenchable, ISpecialInventory, ITankContainer, IInventory, IHasMachineFaces {
+import ro.narc.util.TileEntityStateful;
+
+public class TileEntityAccelerator extends TileEntityStateful implements IWrenchable, ISpecialInventory, ITankContainer, IInventory, IHasMachineFaces {
     public short facing;
     public short prevFacing;
 
@@ -46,6 +48,9 @@ public class TileEntityAccelerator extends TileEntityLiquidUU implements IWrench
 
         this.blockType = LiquidUU.liquidUUBlock;
         this.tank = new LiquidUUTank(2000);
+
+        this.statePacketID = PacketHandler.PKID_MACHINE_STATE;
+        this.channelName = PacketHandler.CHANNEL_NAME;
     }
 
     @Override

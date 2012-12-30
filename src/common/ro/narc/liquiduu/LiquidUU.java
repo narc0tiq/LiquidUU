@@ -1,5 +1,10 @@
 package ro.narc.liquiduu;
 
+import buildcraft.api.recipes.RefineryRecipe;
+import buildcraft.BuildCraftEnergy;
+import buildcraft.BuildCraftFactory;
+import buildcraft.BuildCraftTransport;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -11,6 +16,8 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 
+import ic2.core.Ic2Items;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -18,17 +25,12 @@ import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.Property;
-
 import net.minecraftforge.liquids.LiquidContainerData;
 import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidDictionary;
 import net.minecraftforge.liquids.LiquidStack;
-import buildcraft.api.recipes.RefineryRecipe;
-import buildcraft.BuildCraftEnergy;
-import buildcraft.BuildCraftFactory;
-import buildcraft.BuildCraftTransport;
 
-import ic2.core.Ic2Items;
+import ro.narc.util.NarcLib;
 
 @Mod(
         modid="LiquidUU",
@@ -43,7 +45,7 @@ import ic2.core.Ic2Items;
         packetHandler = PacketHandler.class
 )
 public class LiquidUU {
-    public static boolean DEBUG_NETWORK = false;
+    public static boolean DEBUG_NETWORK = true;
 
     public static ItemStack liquidUU;
     public static LiquidStack liquidUUStack;
@@ -64,6 +66,9 @@ public class LiquidUU {
 
     @Mod.PreInit
     public void preInit(FMLPreInitializationEvent event) {
+        if(DEBUG_NETWORK) {
+            NarcLib.enableDebug();
+        }
         config = new Configuration(event.getSuggestedConfigurationFile());
     }
 

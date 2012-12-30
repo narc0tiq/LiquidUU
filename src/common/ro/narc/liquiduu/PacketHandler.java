@@ -11,6 +11,8 @@ import java.io.IOException;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
 
+import ro.narc.util.PacketTileEntityState;
+
 public class PacketHandler implements IPacketHandler {
     public static final String CHANNEL_NAME = "liquidUU";
     public static final byte PKID_MACHINE_STATE = 0;
@@ -22,7 +24,7 @@ public class PacketHandler implements IPacketHandler {
             byte packetID = data.readByte();
 
             if(packetID == PKID_MACHINE_STATE) {
-                PacketMachineState.readPacket250(data);
+                PacketTileEntityState.readPacket250(data);
             }
             else {
                 System.err.println("Narc, did you forget to add packet handling for packet ID " + packetID + "?");
