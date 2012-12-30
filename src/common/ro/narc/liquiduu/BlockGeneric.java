@@ -33,8 +33,6 @@ public class BlockGeneric extends BlockContainer {
     public static final int TI_MACHINEFACE_NONE   =  21;
     public static final int TI_BROKEN             = 255;
 
-    public static final int EID_FACING = 0;
-
     public BlockGeneric(int id, Material material) {
         super(id, material);
         this.setBlockName("liquiduu.block.generic");
@@ -173,25 +171,6 @@ public class BlockGeneric extends BlockContainer {
 
         player.openGui(LiquidUU.instance, 0, world, x, y, z);
         return true;
-    }
-
-    @Override
-    public void onBlockEventReceived(World world, int x, int y, int z, int eventID, int value) {
-        if(LiquidUU.DEBUG_NETWORK) {
-            System.out.println("BlockGeneric block event with world " + world + " at " + x + ", " + y + ", " + z + ", event " + eventID + " with data " + value);
-        }
-
-        TileEntity te = world.getBlockTileEntity(x, y, z);
-        if(!(te instanceof TileEntityAccelerator)) {
-            // Should never happen, but for sanity's sake:
-            super.onBlockEventReceived(world, x, y, z, eventID, value);
-            return;
-        }
-
-        if(eventID == EID_FACING) {
-            ((TileEntityAccelerator)te).setFacing((short)value);
-            world.markBlockForUpdate(x, y, z);
-        }
     }
 
     @Override

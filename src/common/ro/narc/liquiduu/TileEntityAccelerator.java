@@ -130,13 +130,10 @@ public class TileEntityAccelerator extends TileEntityLiquidUU implements IWrench
             return; // Client is a poopyface.
         }
 
-        if(facing != this.prevFacing) {
-            if(LiquidUU.DEBUG_NETWORK) {
-                System.out.println("SetFacing: " + worldObj + ".addBlockEvent(" + xCoord + ", " + yCoord + ", " + zCoord + ", " + LiquidUU.liquidUUBlock.blockID + ", " + BlockGeneric.EID_FACING + ", " + facing + ")");
-            }
-            worldObj.addBlockEvent(xCoord, yCoord, zCoord, LiquidUU.liquidUUBlock.blockID, BlockGeneric.EID_FACING, facing);
+        if(facing != prevFacing) {
+            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            prevFacing = facing;
         }
-        this.prevFacing = facing;
     }
 
     public boolean wrenchCanRemove(EntityPlayer player) {

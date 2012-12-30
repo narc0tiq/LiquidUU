@@ -5,6 +5,7 @@ import com.google.common.io.ByteStreams;
 
 import java.io.DataInput;
 import java.io.IOException;
+import java.util.Arrays;
 
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
@@ -37,6 +38,10 @@ public class PacketMachineState {
         packet.length = packet.data.length;
         packet.isChunkDataPacket = true;
 
+        if(LiquidUU.DEBUG_NETWORK) {
+            System.out.println("wrote MachineStatePacket for " + machine + ": " + Arrays.toString(data.toByteArray()));
+        }
+
         return packet;
     }
 
@@ -51,6 +56,10 @@ public class PacketMachineState {
 
             TileEntityLiquidUU machine = (TileEntityLiquidUU)world.getBlockTileEntity(x, y, z);
             machine.readFromNetwork(data);
+
+            if(LiquidUU.DEBUG_NETWORK) {
+                System.out.println("read MachineStatePacket for " + machine);
+            }
         }
         catch(IOException e) {
             // and completely ignore it.
