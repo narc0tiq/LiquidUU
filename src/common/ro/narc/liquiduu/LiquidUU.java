@@ -166,7 +166,7 @@ public class LiquidUU {
             new RefineryRecipe(
                 new LiquidStack(liquidUUItem, 1),
                 new LiquidStack(Block.waterStill.blockID, 1),
-                new LiquidStack(Block.waterStill.blockID, 10),
+                new LiquidStack(Block.waterStill.blockID, 4000),
                 5, 1
             )
         );
@@ -174,7 +174,7 @@ public class LiquidUU {
             new RefineryRecipe(
                 new LiquidStack(liquidUUItem, 1),
                 new LiquidStack(Block.lavaStill.blockID, 1),
-                new LiquidStack(Block.lavaStill.blockID, 5),
+                new LiquidStack(Block.lavaStill.blockID, 31),
                 5, 1
             )
         );
