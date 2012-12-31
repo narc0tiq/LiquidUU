@@ -45,7 +45,7 @@ import ro.narc.util.NarcLib;
         packetHandler = PacketHandler.class
 )
 public class LiquidUU {
-    public static boolean DEBUG_NETWORK = true;
+    public static boolean DEBUG_NETWORK = false;
 
     public static ItemStack liquidUU;
     public static LiquidStack liquidUUStack;
