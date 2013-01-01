@@ -194,6 +194,14 @@ public class LiquidUU {
                 5, 1
             )
         );
+        RefineryRecipe.registerRefineryRecipe(
+            new RefineryRecipe(
+                new LiquidStack(liquidUUItem, 1),
+                new LiquidStack(IC2Items.coolant.shiftedIndex, 1),
+                new LiquidStack(IC2Item.coolant.shiftedIndex, 3),
+                5, 1
+            )
+        );
     }
 
     @SuppressWarnings("unchecked")
