@@ -53,7 +53,7 @@ public class Forestry {
             new RefineryRecipe(
                 new LiquidStack(liquidUU, 1),
                 new LiquidStack(liquidBiomass, 1),
-                new LiquidStack(liquidBiomass, 2),
+                new LiquidStack(liquidBiomass, 13),
                 5, 1
             )
         );
@@ -61,7 +61,7 @@ public class Forestry {
             new RefineryRecipe(
                 new LiquidStack(liquidUU, 2),
                 new LiquidStack(liquidBiofuel, 1),
-                new LiquidStack(liquidBiofuel, 2),
+                new LiquidStack(liquidBiofuel, 4),
                 5, 1
             )
         );
@@ -69,7 +69,7 @@ public class Forestry {
             new RefineryRecipe(
                 new LiquidStack(liquidUU, 1),
                 new LiquidStack(liquidSeedOil, 1),
-                new LiquidStack(liquidSeedOil, 4),
+                new LiquidStack(liquidSeedOil, 21),
                 5, 1
             )
         );
@@ -77,7 +77,7 @@ public class Forestry {
             new RefineryRecipe(
                 new LiquidStack(liquidUU, 1),
                 new LiquidStack(liquidJuice, 1),
-                new LiquidStack(liquidJuice, 4),
+                new LiquidStack(liquidJuice, 9),
                 5, 1
             )
         );
@@ -85,7 +85,7 @@ public class Forestry {
             new RefineryRecipe(
                 new LiquidStack(liquidUU, 1),
                 new LiquidStack(liquidHoney, 1),
-                new LiquidStack(liquidHoney, 2),
+                new LiquidStack(liquidHoney, 9),
                 5, 1
             )
         );
