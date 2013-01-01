@@ -1,6 +1,6 @@
 package ro.narc.liquiduu.integration;
 
-import ro.narc.liquiduu.LiquidUU;
+import ro.narc.liquiduu.CommonProxy;
 
 import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.liquids.LiquidContainerData;
@@ -21,23 +21,25 @@ public class Forestry {
 
         ItemStack canEmpty = ItemInterface.getItem("canEmpty");
         ItemStack ingotTin = ItemInterface.getItem("ingotTin");
-        LiquidUU.cannedUU.getItem().setCreativeTab(CreativeTabs.tabMisc);
+        CommonProxy.cannedUUItemStack.getItem().setCreativeTab(canEmpty.getItem().getCreativeTab());
 
-        RecipeManagers.squeezerManager.addRecipe(5, new ItemStack[]{Ic2Items.matter}, LiquidUU.liquidUUStack);
-        RecipeManagers.squeezerManager.addRecipe(5, new ItemStack[]{LiquidUU.cannedUU}, LiquidUU.liquidUUStack, ingotTin, 5);
+        RecipeManagers.squeezerManager.addRecipe(5, new ItemStack[]{Ic2Items.matter}, CommonProxy.liquidUULiquidStack);
+        RecipeManagers.squeezerManager.addRecipe(5, new ItemStack[]{CommonProxy.cannedUUItemStack},
+                CommonProxy.liquidUULiquidStack, ingotTin, 5);
 
-        RecipeManagers.bottlerManager.addRecipe(5, LiquidUU.liquidUUStack, Ic2Items.cell, Ic2Items.matter);
-        RecipeManagers.bottlerManager.addRecipe(5, LiquidUU.liquidUUStack, canEmpty, LiquidUU.cannedUU);
+        RecipeManagers.bottlerManager.addRecipe(5, CommonProxy.liquidUULiquidStack, Ic2Items.cell, Ic2Items.matter);
+        RecipeManagers.bottlerManager.addRecipe(5, CommonProxy.liquidUULiquidStack, canEmpty, CommonProxy.cannedUUItemStack);
 
-        initBuildcraftLiquids(canEmpty);
+        initLiquidContainers(canEmpty);
         initRefineryRecipes();
 
         return true;
     }
 
     @SuppressWarnings("unchecked")
-    public static void initBuildcraftLiquids(ItemStack canEmpty) {
-        LiquidContainerData cannedUUData = new LiquidContainerData(LiquidUU.liquidUUStack, LiquidUU.cannedUU, canEmpty);
+    public static void initLiquidContainers(ItemStack canEmpty) {
+        LiquidContainerData cannedUUData = new LiquidContainerData(CommonProxy.liquidUULiquidStack,
+                CommonProxy.cannedUUItemStack, canEmpty);
         LiquidContainerRegistry.registerLiquid(cannedUUData);
     }
 
@@ -47,13 +49,14 @@ public class Forestry {
         Item liquidSeedOil = ItemInterface.getItem("liquidSeedOil").getItem();
         Item liquidJuice   = ItemInterface.getItem("liquidJuice").getItem();
         Item liquidHoney   = ItemInterface.getItem("liquidHoney").getItem();
-        Item liquidUU      = LiquidUU.liquidUU.getItem();
+        Item crushedIce    = ItemInterface.getItem("liquidIce").getItem();
+        Item liquidUU      = CommonProxy.liquidUUItemStack.getItem();
 
         RefineryRecipe.registerRefineryRecipe(
             new RefineryRecipe(
                 new LiquidStack(liquidUU, 1),
                 new LiquidStack(liquidBiomass, 1),
-                new LiquidStack(liquidBiomass, 13),
+                new LiquidStack(liquidBiomass, 1 + CommonProxy.biomassConversion),
                 5, 1
             )
         );
@@ -61,7 +64,7 @@ public class Forestry {
             new RefineryRecipe(
                 new LiquidStack(liquidUU, 2),
                 new LiquidStack(liquidBiofuel, 1),
-                new LiquidStack(liquidBiofuel, 4),
+                new LiquidStack(liquidBiofuel, 1 + CommonProxy.biofuelConversion),
                 5, 1
             )
         );
@@ -69,7 +72,7 @@ public class Forestry {
             new RefineryRecipe(
                 new LiquidStack(liquidUU, 1),
                 new LiquidStack(liquidSeedOil, 1),
-                new LiquidStack(liquidSeedOil, 21),
+                new LiquidStack(liquidSeedOil, 1 + CommonProxy.seedOilConversion),
                 5, 1
             )
         );
@@ -77,7 +80,7 @@ public class Forestry {
             new RefineryRecipe(
                 new LiquidStack(liquidUU, 1),
                 new LiquidStack(liquidJuice, 1),
-                new LiquidStack(liquidJuice, 9),
+                new LiquidStack(liquidJuice, 1 + CommonProxy.appleJuiceConversion),
                 5, 1
             )
         );
@@ -85,7 +88,15 @@ public class Forestry {
             new RefineryRecipe(
                 new LiquidStack(liquidUU, 1),
                 new LiquidStack(liquidHoney, 1),
-                new LiquidStack(liquidHoney, 9),
+                new LiquidStack(liquidHoney, 1 + CommonProxy.honeyConversion),
+                5, 1
+            )
+        );
+        RefineryRecipe.registerRefineryRecipe(
+            new RefineryRecipe(
+                new LiquidStack(liquidUU, 1),
+                new LiquidStack(crushedIce, 1),
+                new LiquidStack(crushedIce, 1 + CommonProxy.iceConversion),
                 5, 1
             )
         );

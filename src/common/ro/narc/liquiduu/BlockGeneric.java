@@ -46,11 +46,11 @@ public class BlockGeneric extends BlockContainer {
     @Override
     @SuppressWarnings("unchecked")
     public void getSubBlocks(int id, CreativeTabs tab, List tabContents) {
-        if(!tabContents.contains(LiquidUU.accelerator)) {
-            tabContents.add(LiquidUU.accelerator);
+        if(!tabContents.contains(CommonProxy.accelerator)) {
+            tabContents.add(CommonProxy.accelerator);
         }
-        if(!tabContents.contains(LiquidUU.electrolyzer)) {
-            tabContents.add(LiquidUU.electrolyzer);
+        if(!tabContents.contains(CommonProxy.electrolyzer)) {
+            tabContents.add(CommonProxy.electrolyzer);
         }
     }
 

@@ -1,10 +1,5 @@
 package ro.narc.liquiduu;
 
-import buildcraft.api.recipes.RefineryRecipe;
-import buildcraft.BuildCraftEnergy;
-import buildcraft.BuildCraftFactory;
-import buildcraft.BuildCraftTransport;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -12,23 +7,9 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-import ic2.core.Ic2Items;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-
 import net.minecraftforge.common.Configuration;
-import net.minecraftforge.common.Property;
-import net.minecraftforge.liquids.LiquidContainerData;
-import net.minecraftforge.liquids.LiquidContainerRegistry;
-import net.minecraftforge.liquids.LiquidDictionary;
-import net.minecraftforge.liquids.LiquidStack;
 
 import ro.narc.util.NarcLib;
 
@@ -45,16 +26,7 @@ import ro.narc.util.NarcLib;
         packetHandler = PacketHandler.class
 )
 public class LiquidUU {
-    public static boolean DEBUG_NETWORK = false;
-
-    public static ItemStack liquidUU;
-    public static LiquidStack liquidUUStack;
-    public static ItemStack cannedUU;
-    public static Block liquidUUBlock;
-    public static ItemStack accelerator;
-    public static ItemStack electrolyzer;
-    public static ItemStack electrolyzedWater;
-    public static LiquidStack electrolyzedWaterStack;
+    public static boolean DEBUG = false;
 
     @Mod.Instance("LiquidUU")
     public static LiquidUU instance;
@@ -66,71 +38,22 @@ public class LiquidUU {
 
     @Mod.PreInit
     public void preInit(FMLPreInitializationEvent event) {
-        if(DEBUG_NETWORK) {
-            NarcLib.enableDebug();
-        }
         config = new Configuration(event.getSuggestedConfigurationFile());
     }
 
     @Mod.Init
     public void init(FMLInitializationEvent event) {
-
         try {
             config.load();
         }
         catch (RuntimeException e) { /* and ignore it */ }
 
-        Property accelBlockID = config.getBlock("accelerator", 1300);
-        Property liquidItemID = config.getItem("liquid.uu", 21001);
-        Property cannedItemID = config.getItem("canned.uu", 21002);
-        Property electricWaterID = config.getItem("electricWater", 21003);
+        proxy.init(config);
         config.save();
 
-        Item liquidUUItem = new ItemGeneric("liquidUU", 0, liquidItemID.getInt(21001));
-        liquidUU = new ItemStack(liquidUUItem, 1);
-
-        Item cannedUUItem = new ItemGeneric("cannedUU", 1, cannedItemID.getInt(21002));
-        cannedUU = new ItemStack(cannedUUItem, 1);
-
-        Item liquidElectrolyzedWaterItem = new ItemGeneric("electricWater", 2, electricWaterID.getInt(21003));
-        electrolyzedWater = new ItemStack(liquidElectrolyzedWaterItem, 1);
-
-        liquidUUBlock = new BlockGeneric(accelBlockID.getInt(1300));
-        liquidUUBlock.setCreativeTab(ic2.core.IC2.tabIC2);
-        GameRegistry.registerBlock(liquidUUBlock, ItemGenericBlock.class, liquidUUBlock.getBlockName());
-        GameRegistry.registerTileEntity(TileEntityAccelerator.class, "Accelerator");
-        GameRegistry.registerTileEntity(TileEntityElectrolyzer.class, "liquiduu.Electrolyzer");
-        accelerator  = new ItemStack(liquidUUBlock, 1, BlockGeneric.DATA_ACCELERATOR);
-        electrolyzer = new ItemStack(liquidUUBlock, 1, BlockGeneric.DATA_ELECTROLYZER);
-
-        GameRegistry.addRecipe(accelerator, "TH", "SA", " w",
-                Character.valueOf('T'), BuildCraftFactory.tankBlock,
-                Character.valueOf('H'), BuildCraftFactory.hopperBlock,
-                Character.valueOf('S'), BuildCraftTransport.pipeLiquidsStone,
-                Character.valueOf('A'), Ic2Items.advancedCircuit,
-                Character.valueOf('w'), BuildCraftTransport.pipeItemsWood
-        );
-        GameRegistry.addRecipe(accelerator, " ST", "wAH",
-                Character.valueOf('T'), BuildCraftFactory.tankBlock,
-                Character.valueOf('H'), BuildCraftFactory.hopperBlock,
-                Character.valueOf('S'), BuildCraftTransport.pipeLiquidsStone,
-                Character.valueOf('A'), Ic2Items.advancedCircuit,
-                Character.valueOf('w'), BuildCraftTransport.pipeItemsWood
-        );
-        GameRegistry.addRecipe(accelerator, "wAH", " ST",
-                Character.valueOf('T'), BuildCraftFactory.tankBlock,
-                Character.valueOf('H'), BuildCraftFactory.hopperBlock,
-                Character.valueOf('S'), BuildCraftTransport.pipeLiquidsStone,
-                Character.valueOf('A'), Ic2Items.advancedCircuit,
-                Character.valueOf('w'), BuildCraftTransport.pipeItemsWood
-        );
-
-        proxy.init();
-
-        initLiquidData();
-        initRefineryRecipes();
-
-        NetworkRegistry.instance().registerGuiHandler(this, new LiquidUUGUIHandler());
+        if(DEBUG) {
+            NarcLib.enableDebug();
+        }
     }
 
     @Mod.PostInit
@@ -138,70 +61,11 @@ public class LiquidUU {
         loadIntegration("Forestry");
         loadIntegration("NEI");
         loadIntegration("ThermalExpansion");
-    }
-
-    @SuppressWarnings("unchecked")
-    private static void initLiquidData() {
-        liquidUUStack = new LiquidStack(liquidUU.getItem(), 1000);
-        liquidUUStack = LiquidDictionary.getOrCreateLiquid("liquidUU", liquidUUStack);
-        LiquidContainerData liquidUUData = new LiquidContainerData(liquidUUStack, Ic2Items.matter,
-                Ic2Items.cell);
-        LiquidContainerRegistry.registerLiquid(liquidUUData);
-
-        electrolyzedWaterStack = new LiquidStack(electrolyzedWater.getItem(), 1000);
-        electrolyzedWaterStack = LiquidDictionary.getOrCreateLiquid("electrolyzedWater", electrolyzedWaterStack);
-        LiquidContainerData electricWaterData = new LiquidContainerData(electrolyzedWaterStack,
-                Ic2Items.electrolyzedWaterCell, Ic2Items.cell);
-        LiquidContainerRegistry.registerLiquid(electricWaterData);
+        loadIntegration("Railcraft");
     }
 
     public static Side getSide() {
         return FMLCommonHandler.instance().getEffectiveSide();
-    }
-
-    private static void initRefineryRecipes() {
-        Item liquidUUItem = liquidUU.getItem();
-
-        RefineryRecipe.registerRefineryRecipe(
-            new RefineryRecipe(
-                new LiquidStack(liquidUUItem, 1),
-                new LiquidStack(Block.waterStill.blockID, 1),
-                new LiquidStack(Block.waterStill.blockID, 4000),
-                5, 1
-            )
-        );
-        RefineryRecipe.registerRefineryRecipe(
-            new RefineryRecipe(
-                new LiquidStack(liquidUUItem, 1),
-                new LiquidStack(Block.lavaStill.blockID, 1),
-                new LiquidStack(Block.lavaStill.blockID, 31),
-                5, 1
-            )
-        );
-        RefineryRecipe.registerRefineryRecipe(
-            new RefineryRecipe(
-                new LiquidStack(liquidUUItem, 1),
-                new LiquidStack(BuildCraftEnergy.oilStill.blockID, 1),
-                new LiquidStack(BuildCraftEnergy.oilStill.blockID, 2),
-                5, 1
-            )
-        );
-        RefineryRecipe.registerRefineryRecipe(
-            new RefineryRecipe(
-                new LiquidStack(liquidUUItem, 2),
-                new LiquidStack(BuildCraftEnergy.fuel.shiftedIndex, 1),
-                new LiquidStack(BuildCraftEnergy.fuel.shiftedIndex, 2),
-                5, 1
-            )
-        );
-        RefineryRecipe.registerRefineryRecipe(
-            new RefineryRecipe(
-                new LiquidStack(liquidUUItem, 1),
-                new LiquidStack(IC2Items.coolant.shiftedIndex, 1),
-                new LiquidStack(IC2Item.coolant.shiftedIndex, 3),
-                5, 1
-            )
-        );
     }
 
     @SuppressWarnings("unchecked")
@@ -214,7 +78,9 @@ public class LiquidUU {
         }
         catch (Throwable e) {
             System.out.println("LiquidUU: Did not load " + name + " integration: " + e);
-            e.printStackTrace();
+            if(DEBUG) {
+                e.printStackTrace();
+            }
             return false;
         }
     }

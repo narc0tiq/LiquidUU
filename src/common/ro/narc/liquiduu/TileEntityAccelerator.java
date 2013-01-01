@@ -46,7 +46,7 @@ public class TileEntityAccelerator extends TileEntityStateful implements IWrench
 
         this.inventory = new ItemStack[3];
 
-        this.blockType = LiquidUU.liquidUUBlock;
+        this.blockType = CommonProxy.machineBlock;
         this.tank = new LiquidUUTank(2000);
 
         this.statePacketID = PacketHandler.PKID_MACHINE_STATE;
@@ -65,7 +65,7 @@ public class TileEntityAccelerator extends TileEntityStateful implements IWrench
 
         if((inventory[2] != null) && isItemStackUUM(inventory[2])) {
             if(tank.getLiquidAmount() <= 1000) {
-                fill(0, LiquidUU.liquidUUStack.copy(), true);
+                fill(0, CommonProxy.liquidUULiquidStack.copy(), true);
                 reduceInventorySlot(2, 1);
             }
         }
@@ -150,11 +150,11 @@ public class TileEntityAccelerator extends TileEntityStateful implements IWrench
     }
 
     public ItemStack getWrenchDrop(EntityPlayer player) {
-        return LiquidUU.accelerator.copy();
+        return CommonProxy.accelerator.copy();
     }
 
     public boolean isItemStackUUM(ItemStack stack) {
-        return stack.isItemEqual(Ic2Items.matter) || stack.isItemEqual(LiquidUU.cannedUU);
+        return Ic2Items.matter.isItemEqual(stack) || CommonProxy.cannedUUItemStack.isItemEqual(stack);
     }
 
     public int getOperationCost() {
@@ -495,7 +495,7 @@ public class TileEntityAccelerator extends TileEntityStateful implements IWrench
     }
 
     public int fill(int tankIndex, LiquidStack resource, boolean wetRun) {
-        if((tankIndex != 0) || !LiquidUU.liquidUUStack.isLiquidEqual(resource)) {
+        if((tankIndex != 0) || !CommonProxy.liquidUULiquidStack.isLiquidEqual(resource)) {
             return 0; // What's this crap you're trying to feed me?
         }
 
@@ -511,14 +511,18 @@ public class TileEntityAccelerator extends TileEntityStateful implements IWrench
     }
 
     public ILiquidTank getTank(ForgeDirection side, LiquidStack liquid) {
-        if(LiquidUU.liquidUUStack.isLiquidEqual(liquid)) {
-            return tank;
+        if(side == ForgeDirection.getOrientation(facing)) {
+            return null;
         }
 
-        return null;
+        return tank;
     }
 
     public ILiquidTank[] getTanks(ForgeDirection side) {
+        if(side == ForgeDirection.getOrientation(facing)) {
+            return new ILiquidTank[0];
+        }
+
         return new ILiquidTank[]{tank};
     }
 //} // interface ITankContainer
@@ -538,7 +542,7 @@ public class TileEntityAccelerator extends TileEntityStateful implements IWrench
             case 0:
                 LiquidStack uu = tank.getLiquid();
                 if(uu == null) {
-                    uu = LiquidUU.liquidUUStack.copy();
+                    uu = CommonProxy.liquidUULiquidStack.copy();
                 }
 
                 uu.amount = value;

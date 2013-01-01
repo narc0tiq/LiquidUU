@@ -17,7 +17,7 @@ public class SlotUUM extends Slot {
             return false;
         }
 
-        if(stack.isItemEqual(LiquidUU.cannedUU) || stack.isItemEqual(Ic2Items.matter)) {
+        if(stack.isItemEqual(CommonProxy.cannedUUItemStack) || stack.isItemEqual(Ic2Items.matter)) {
             return true;
         }
         return false;

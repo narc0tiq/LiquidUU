@@ -26,7 +26,7 @@ public class TileEntityElectrolyzer extends TileEntityStateful implements IWrenc
 
     public TileEntityElectrolyzer() {
         super();
-        this.blockType = LiquidUU.liquidUUBlock;
+        this.blockType = CommonProxy.machineBlock;
 
         this.statePacketID = PacketHandler.PKID_MACHINE_STATE;
         this.channelName = PacketHandler.CHANNEL_NAME;
@@ -80,7 +80,7 @@ public class TileEntityElectrolyzer extends TileEntityStateful implements IWrenc
     }
 
     public ItemStack getWrenchDrop(EntityPlayer player) {
-        return LiquidUU.electrolyzer;
+        return CommonProxy.electrolyzer.copy();
     }
 //}
 

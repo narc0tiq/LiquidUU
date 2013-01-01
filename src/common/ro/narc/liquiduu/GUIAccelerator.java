@@ -159,8 +159,8 @@ public class GUIAccelerator extends GuiContainer {
     }
 
     public void drawLiquidTank(int x, int y, int scaledValue) {
-        ForgeHooksClient.bindTexture(LiquidUU.liquidUU.getItem().getTextureFile(), 0);
-        int iconIndex = LiquidUU.liquidUU.getIconIndex();
+        ForgeHooksClient.bindTexture(CommonProxy.liquidUUItemStack.getItem().getTextureFile(), 0);
+        int iconIndex = CommonProxy.liquidUUItemStack.getIconIndex();
 
         int imgY = iconIndex / 16;
         int imgX = iconIndex - imgY * 16;
