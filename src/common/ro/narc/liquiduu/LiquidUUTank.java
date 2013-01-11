@@ -18,4 +18,11 @@ public class LiquidUUTank extends LiquidTank {
 
         return liquid.amount;
     }
+
+    public int getTankPressure() {
+        if((this.getLiquid() == null) || (this.getLiquid().amount < this.getCapacity())) {
+            return -50;
+        }
+        return 0;
+    }
 }

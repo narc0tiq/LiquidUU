@@ -38,6 +38,7 @@ public class LiquidUU {
 
     @Mod.PreInit
     public void preInit(FMLPreInitializationEvent event) {
+        NarcLib.requireMinVersion(1);
         config = new Configuration(event.getSuggestedConfigurationFile());
     }
 

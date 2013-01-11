@@ -15,9 +15,14 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import ro.narc.util.GUITooltip;
+import ro.narc.util.GUITank;
+
 public class GUIAccelerator extends GuiContainer {
     public static final int BORDER = 4;
     public int main_width, main_height, left, top, center, middle, right, bottom;
+    public GUITooltip tooltip = new GUITooltip();
+    public GUITank guiTank = new GUITank("/liquiduu-gfx/gui-accelerator.png", 47, 176, 16);
 
     TileEntityAccelerator accelerator;
 
@@ -58,8 +63,8 @@ public class GUIAccelerator extends GuiContainer {
                     176, 0, 16, 16);
         }
 
-        int scaledLiquidAmount = MathHelper.ceiling_float_int((float) accelerator.tank.getLiquidAmount() * 47 / 2000.0F);
-        drawLiquidTank(152, 29, scaledLiquidAmount);
+        guiTank.tank = accelerator.tank;
+        guiTank.draw(152, 29);
 
         // Restore previous coordinates.
         GL11.glPopMatrix();
@@ -98,16 +103,15 @@ public class GUIAccelerator extends GuiContainer {
 
         if((mouseX >= 152) && (mouseX < 168) &&
            (mouseY >=  29) && (mouseY <  76)) {
-            String line1 = String.format("%.3f UUM stored",
-                    (float) uumAmount / 1000.0F);
-            String line2 = "";
+            tooltip.lines.clear();
+            tooltip.lines.add(String.format("%.3f UUM\u00a77 stored", (float) uumAmount / 1000.0F));
 
             if(operationCost > 0) {
-                line2 = String.format("%d operations remaining",
-                    MathHelper.floor_float((float)uumAmount / (float)operationCost));
+                tooltip.lines.add(String.format("%d operations\u00a77 remaining",
+                    MathHelper.floor_float((float)uumAmount / (float)operationCost)));
             }
 
-            drawTwoLineHoveringText(line1, line2, mouseX, mouseY);
+            tooltip.draw(mouseX, mouseY);
         }
     }
 
@@ -156,58 +160,5 @@ public class GUIAccelerator extends GuiContainer {
 
         fontRenderer.drawString(line1[0], rightAlign - topWidths[0], bottom-17, 0x404040);
         fontRenderer.drawString(line2[0], rightAlign - botWidths[0], bottom-8,  0x404040);
-    }
-
-    public void drawLiquidTank(int x, int y, int scaledValue) {
-        ForgeHooksClient.bindTexture(CommonProxy.liquidUUItemStack.getItem().getTextureFile(), 0);
-        int iconIndex = CommonProxy.liquidUUItemStack.getIconIndex();
-
-        int imgY = iconIndex / 16;
-        int imgX = iconIndex - imgY * 16;
-
-        for(int i = scaledValue; i > 0; i -= 16) {
-            drawTexturedModalRect(x, y + (47 - i),
-                                  imgX * 16, imgY * 16,
-                                  16, Math.min(16, i));
-        }
-
-        int textureID = mc.renderEngine.getTexture("/liquiduu-gfx/gui-accelerator.png");
-        mc.renderEngine.bindTexture(textureID);
-
-        drawTexturedModalRect(x, y, 176, 16, 16, 47);
-    }
-
-    // Lovingly stolen from GuiContainer.drawCreativeTabHoveringText();
-    // Variable names are mostly guesswork.
-    protected void drawTwoLineHoveringText(String line1, String line2, int mouseX, int mouseY)
-    {
-        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-        RenderHelper.disableStandardItemLighting();
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
-        int maxWidth = Math.max(this.fontRenderer.getStringWidth(line1), this.fontRenderer.getStringWidth(line2));
-        int targetX = mouseX + 12;
-        int targetY = mouseY - 21;
-        byte height = 17;
-        this.zLevel = 300.0F;
-        itemRenderer.zLevel = 300.0F;
-        int bgCol = 0xF0100010; // In order: ARGB
-        this.drawGradientRect(targetX - 3, targetY - 4, targetX + maxWidth + 3, targetY - 3, bgCol, bgCol);
-        this.drawGradientRect(targetX - 3, targetY + height + 3, targetX + maxWidth + 3, targetY + height + 4, bgCol, bgCol);
-        this.drawGradientRect(targetX - 3, targetY - 3, targetX + maxWidth + 3, targetY + height + 3, bgCol, bgCol);
-        this.drawGradientRect(targetX - 4, targetY - 3, targetX - 3, targetY + height + 3, bgCol, bgCol);
-        this.drawGradientRect(targetX + maxWidth + 3, targetY - 3, targetX + maxWidth + 4, targetY + height + 3, bgCol, bgCol);
-        int var10 = 0x505000FF;
-        int var11 = (var10 & 0xFEFEFE) >> 1 | var10 & 0xFF000000;
-        this.drawGradientRect(targetX - 3, targetY - 3 + 1, targetX - 3 + 1, targetY + height + 3 - 1, var10, var11);
-        this.drawGradientRect(targetX + maxWidth + 2, targetY - 3 + 1, targetX + maxWidth + 3, targetY + height + 3 - 1, var10, var11);
-        this.drawGradientRect(targetX - 3, targetY - 3, targetX + maxWidth + 3, targetY - 3 + 1, var10, var10);
-        this.drawGradientRect(targetX - 3, targetY + height + 2, targetX + maxWidth + 3, targetY + height + 3, var11, var11);
-        this.fontRenderer.drawStringWithShadow(line1, targetX, targetY, 0xFFFFFFFF);
-        this.fontRenderer.drawStringWithShadow(line2, targetX, targetY + 9, 0xFFBBBBBB);
-        this.zLevel = 0.0F;
-        itemRenderer.zLevel = 0.0F;
-        GL11.glEnable(GL11.GL_LIGHTING);
-        RenderHelper.enableGUIStandardItemLighting();
     }
 }
