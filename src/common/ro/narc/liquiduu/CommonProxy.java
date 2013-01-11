@@ -29,6 +29,12 @@ public class CommonProxy {
     public static int cannedUUItemID      = 21002;
     public static int electricWaterItemID = 21003;
 
+    public static int baseConversionUU        =  3;
+    public static int convenienceConversionUU =  5;
+    public static int nonfuelConversionUU     =  1;
+
+    public static int baseConversionMJ = 5;
+
     public static int oilConversion        =  1;
     public static int fuelConversion       =  1;
     public static int biofuelConversion    =  3;
@@ -87,19 +93,29 @@ public class CommonProxy {
 
         config.addCustomCategoryComment("conversion", "Conversion ratios for UU used in a Buildcraft refinery. Input will " +
                 "always be 1 millibucket of the liquid, output will always be 1 + conversionRatio.");
-        config.addCustomCategoryComment("conversion.base", "Base conversions consume 1 UU to produce this many of a liquid.");
-        config.addCustomCategoryComment("conversion.convenience", "Convenience conversions consume 2 UU to produce this many of a liquid.");
+        config.addCustomCategoryComment("conversion.base", "This category is for liquids that can be further processed (e.g. oil can be processed to fuel).");
+        config.addCustomCategoryComment("conversion.convenience", "This category is for liquids that are burned directly (e.g. fuel, biofuel).");
+        config.addCustomCategoryComment("conversion.nonfuel", "This category is for liquids that are not burned at all.");
+        Property baseConversionMJ     = config.get("conversion", "mj.per.uu", this.baseConversionMJ);
+        baseConversionMJ.comment = "The Refinery will consume this many MJ per unit of UU being converted in each step.";
+        Property baseConversionUU = config.get("conversion", "uu.base", this.baseConversionUU);
+        baseConversionUU.comment = "All conversions in the \"base\" category will consume this much UU";
+        Property convenienceConversionUU = config.get("conversion", "uu.convenience", this.convenienceConversionUU);
+        convenienceConversionUU.comment = "All conversions in the \"convenience\" category will consume this much UU";
+        Property nonfuelConversionUU = config.get("conversion", "uu.nonfuel", this.nonfuelConversionUU);
+        nonfuelConversionUU.comment = "All conversions in the \"nonfuel\" category will consume this much UU";
+
         Property oilConversion        = config.get("conversion.base", "oil", this.oilConversion);
         Property fuelConversion       = config.get("conversion.convenience", "fuel", this.fuelConversion);
         Property biofuelConversion    = config.get("conversion.convenience", "biofuel", this.biofuelConversion);
         Property biomassConversion    = config.get("conversion.base", "biomass", this.biomassConversion);
         Property appleJuiceConversion = config.get("conversion.base", "apple.juice", this.appleJuiceConversion);
         Property honeyConversion      = config.get("conversion.base", "liquid.honey", this.honeyConversion);
-        Property seedOilConversion    = config.get("conversion.base", "seed.oil", this.seedOilConversion);
+        Property seedOilConversion    = config.get("conversion.convenience", "seed.oil", this.seedOilConversion);
         Property creosoteConversion   = config.get("conversion.convenience", "creosote.oil", this.creosoteConversion);
         Property lavaConversion       = config.get("conversion.convenience", "lava", this.lavaConversion);
-        Property iceConversion        = config.get("conversion.base", "crushed.ice", this.iceConversion);
-        Property coolantConversion    = config.get("conversion.base", "ic2.coolant", this.coolantConversion);
+        Property iceConversion        = config.get("conversion.nonfuel", "crushed.ice", this.iceConversion);
+        Property coolantConversion    = config.get("conversion.nonfuel", "ic2.coolant", this.coolantConversion);
 
         Property debugOverride = config.get("general", "debug.override", LiquidUU.DEBUG);
         debugOverride.comment  = "This flag allows you to force LiquidUU debugging on, which may help figure out why stuff broke.";
@@ -110,6 +126,12 @@ public class CommonProxy {
         this.liquidUUItemID       = liquidUUItemID.getInt(this.liquidUUItemID);
         this.cannedUUItemID       = cannedUUItemID.getInt(this.cannedUUItemID);
         this.electricWaterItemID  = electricWaterItemID.getInt(this.electricWaterItemID);
+
+        this.baseConversionMJ = baseConversionMJ.getInt(this.baseConversionMJ);
+
+        this.baseConversionUU        = baseConversionUU.getInt(this.baseConversionUU);
+        this.convenienceConversionUU = convenienceConversionUU.getInt(this.convenienceConversionUU);
+        this.nonfuelConversionUU     = nonfuelConversionUU.getInt(this.nonfuelConversionUU);
 
         this.oilConversion        = oilConversion.getInt(this.oilConversion);
         this.fuelConversion       = fuelConversion.getInt(this.fuelConversion);
@@ -200,40 +222,23 @@ public class CommonProxy {
         );
     }
 
-    public void initRefineryRecipes() {
+    public static void addConversionRecipe(int uuCost, int outputItemID, int outputItemMeta, int outputAmount) {
         Item liquidUUItem = liquidUUItemStack.getItem();
 
-        RefineryRecipe.registerRefineryRecipe(
-            new RefineryRecipe(
-                new LiquidStack(liquidUUItem, 2),
-                new LiquidStack(Block.lavaStill.blockID, 1),
-                new LiquidStack(Block.lavaStill.blockID, 1 + lavaConversion),
-                5, 1
-            )
-        );
-        RefineryRecipe.registerRefineryRecipe(
-            new RefineryRecipe(
-                new LiquidStack(liquidUUItem, 1),
-                new LiquidStack(BuildCraftEnergy.oilStill.blockID, 1),
-                new LiquidStack(BuildCraftEnergy.oilStill.blockID, 1 + oilConversion),
-                5, 1
-            )
-        );
-        RefineryRecipe.registerRefineryRecipe(
-            new RefineryRecipe(
-                new LiquidStack(liquidUUItem, 2),
-                new LiquidStack(BuildCraftEnergy.fuel.shiftedIndex, 1),
-                new LiquidStack(BuildCraftEnergy.fuel.shiftedIndex, 1 + fuelConversion),
-                5, 1
-            )
-        );
-        RefineryRecipe.registerRefineryRecipe(
-            new RefineryRecipe(
-                new LiquidStack(liquidUUItem, 1),
-                new LiquidStack(Ic2Items.coolant.itemID, 1),
-                new LiquidStack(Ic2Items.coolant.itemID, 1 + coolantConversion),
-                5, 1
-            )
-        );
+        RefineryRecipe.registerRefineryRecipe(new RefineryRecipe(
+            new LiquidStack(liquidUUItem, uuCost),
+            new LiquidStack(outputItemID, 1,                outputItemMeta),
+            new LiquidStack(outputItemID, 1 + outputAmount, outputItemMeta),
+            uuCost * baseConversionMJ, 1
+        ));
+    }
+
+    public void initRefineryRecipes() {
+        addConversionRecipe(convenienceConversionUU, Block.lavaStill.blockID, 0, lavaConversion);
+
+        addConversionRecipe(baseConversionUU, BuildCraftEnergy.oilStill.blockID, 0, oilConversion);
+        addConversionRecipe(convenienceConversionUU, BuildCraftEnergy.fuel.shiftedIndex, 0, fuelConversion);
+
+        addConversionRecipe(nonfuelConversionUU, Ic2Items.coolant.itemID, Ic2Items.coolant.getItemDamage(), coolantConversion);
     }
 }

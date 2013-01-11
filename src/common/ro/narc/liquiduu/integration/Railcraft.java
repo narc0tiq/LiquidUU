@@ -20,14 +20,8 @@ public class Railcraft {
 
         ItemStack creosoteStack = ItemRegistry.getItem("liquid.creosote.liquid", 1);
         if(creosoteStack != null) {
-            Item creosote = creosoteStack.getItem();
-            Item liquidUU = CommonProxy.liquidUUItemStack.getItem();
-
-            RefineryRecipe.registerRefineryRecipe(new RefineryRecipe(
-                new LiquidStack(liquidUU, 2), new LiquidStack(creosote, 1),
-                new LiquidStack(creosote, 1 + CommonProxy.creosoteConversion),
-                5, 1
-            ));
+            CommonProxy.addConversionRecipe(CommonProxy.convenienceConversionUU, creosoteStack.itemID, creosoteStack.getItemDamage(),
+                    CommonProxy.creosoteConversion);
         }
 
         return true;

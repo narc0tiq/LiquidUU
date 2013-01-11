@@ -13,7 +13,6 @@ import forestry.api.recipes.RecipeManagers;
 import ic2.core.Ic2Items;
 
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class Forestry {
@@ -44,61 +43,24 @@ public class Forestry {
     }
 
     public static void initRefineryRecipes() {
-        Item liquidBiomass = ItemInterface.getItem("liquidBiomass").getItem();
-        Item liquidBiofuel = ItemInterface.getItem("liquidBiofuel").getItem();
-        Item liquidSeedOil = ItemInterface.getItem("liquidSeedOil").getItem();
-        Item liquidJuice   = ItemInterface.getItem("liquidJuice").getItem();
-        Item liquidHoney   = ItemInterface.getItem("liquidHoney").getItem();
-        Item crushedIce    = ItemInterface.getItem("liquidIce").getItem();
-        Item liquidUU      = CommonProxy.liquidUUItemStack.getItem();
+        ItemStack liquidBiomass = ItemInterface.getItem("liquidBiomass");
+        ItemStack liquidBiofuel = ItemInterface.getItem("liquidBiofuel");
+        ItemStack liquidSeedOil = ItemInterface.getItem("liquidSeedOil");
+        ItemStack liquidJuice   = ItemInterface.getItem("liquidJuice");
+        ItemStack liquidHoney   = ItemInterface.getItem("liquidHoney");
+        ItemStack crushedIce    = ItemInterface.getItem("liquidIce");
 
-        RefineryRecipe.registerRefineryRecipe(
-            new RefineryRecipe(
-                new LiquidStack(liquidUU, 1),
-                new LiquidStack(liquidBiomass, 1),
-                new LiquidStack(liquidBiomass, 1 + CommonProxy.biomassConversion),
-                5, 1
-            )
-        );
-        RefineryRecipe.registerRefineryRecipe(
-            new RefineryRecipe(
-                new LiquidStack(liquidUU, 2),
-                new LiquidStack(liquidBiofuel, 1),
-                new LiquidStack(liquidBiofuel, 1 + CommonProxy.biofuelConversion),
-                5, 1
-            )
-        );
-        RefineryRecipe.registerRefineryRecipe(
-            new RefineryRecipe(
-                new LiquidStack(liquidUU, 1),
-                new LiquidStack(liquidSeedOil, 1),
-                new LiquidStack(liquidSeedOil, 1 + CommonProxy.seedOilConversion),
-                5, 1
-            )
-        );
-        RefineryRecipe.registerRefineryRecipe(
-            new RefineryRecipe(
-                new LiquidStack(liquidUU, 1),
-                new LiquidStack(liquidJuice, 1),
-                new LiquidStack(liquidJuice, 1 + CommonProxy.appleJuiceConversion),
-                5, 1
-            )
-        );
-        RefineryRecipe.registerRefineryRecipe(
-            new RefineryRecipe(
-                new LiquidStack(liquidUU, 1),
-                new LiquidStack(liquidHoney, 1),
-                new LiquidStack(liquidHoney, 1 + CommonProxy.honeyConversion),
-                5, 1
-            )
-        );
-        RefineryRecipe.registerRefineryRecipe(
-            new RefineryRecipe(
-                new LiquidStack(liquidUU, 1),
-                new LiquidStack(crushedIce, 1),
-                new LiquidStack(crushedIce, 1 + CommonProxy.iceConversion),
-                5, 1
-            )
-        );
+        CommonProxy.addConversionRecipe(CommonProxy.baseConversionUU,        liquidBiomass.itemID, liquidBiomass.getItemDamage(),
+                CommonProxy.biomassConversion);
+        CommonProxy.addConversionRecipe(CommonProxy.convenienceConversionUU, liquidBiofuel.itemID, liquidBiofuel.getItemDamage(),
+                CommonProxy.biofuelConversion);
+        CommonProxy.addConversionRecipe(CommonProxy.baseConversionUU,        liquidJuice.itemID,   liquidJuice.getItemDamage(),
+                CommonProxy.appleJuiceConversion);
+        CommonProxy.addConversionRecipe(CommonProxy.baseConversionUU,        liquidHoney.itemID,   liquidHoney.getItemDamage(),
+                CommonProxy.honeyConversion);
+        CommonProxy.addConversionRecipe(CommonProxy.convenienceConversionUU, liquidSeedOil.itemID, liquidSeedOil.getItemDamage(),
+                CommonProxy.seedOilConversion);
+        CommonProxy.addConversionRecipe(CommonProxy.nonfuelConversionUU,     crushedIce.itemID,    crushedIce.getItemDamage(),
+                CommonProxy.iceConversion);
     }
 }
