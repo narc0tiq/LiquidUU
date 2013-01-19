@@ -1,11 +1,8 @@
 package ro.narc.liquiduu.integration;
 
-import ro.narc.liquiduu.CommonProxy;
-
-import net.minecraftforge.liquids.LiquidStack;
-import net.minecraftforge.liquids.LiquidContainerData;
-import net.minecraftforge.liquids.LiquidContainerRegistry;
 import buildcraft.api.recipes.RefineryRecipe;
+
+import cpw.mods.fml.relauncher.Side;
 
 import forestry.api.core.ItemInterface;
 import forestry.api.recipes.RecipeManagers;
@@ -15,12 +12,22 @@ import ic2.core.Ic2Items;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.liquids.LiquidContainerData;
+import net.minecraftforge.liquids.LiquidContainerRegistry;
+
+import ro.narc.liquiduu.CommonProxy;
+import ro.narc.liquiduu.LiquidUU;
+
 public class Forestry {
     public static boolean init() {
 
         ItemStack canEmpty = ItemInterface.getItem("canEmpty");
         ItemStack ingotTin = ItemInterface.getItem("ingotTin");
-        CommonProxy.cannedUUItemStack.getItem().setCreativeTab(canEmpty.getItem().getCreativeTab());
+
+        if(LiquidUU.getSide() == Side.CLIENT) {
+            CommonProxy.cannedUUItemStack.getItem().setCreativeTab(canEmpty.getItem().getCreativeTab());
+        }
 
         RecipeManagers.squeezerManager.addRecipe(5, new ItemStack[]{Ic2Items.matter}, CommonProxy.liquidUULiquidStack);
         RecipeManagers.squeezerManager.addRecipe(5, new ItemStack[]{CommonProxy.cannedUUItemStack},
