@@ -6,7 +6,7 @@ import net.minecraft.world.World;
 
 import cpw.mods.fml.common.network.IGuiHandler;
 
-public class LiquidUUGUIHandler implements IGuiHandler {
+public class GUIHandler implements IGuiHandler {
     @Override
     public Object getServerGuiElement(int id, EntityPlayer player, World world,
             int x, int y, int z) {
@@ -14,6 +14,9 @@ public class LiquidUUGUIHandler implements IGuiHandler {
 
         if(te instanceof TileEntityAccelerator) {
             return new ContainerAccelerator(player.inventory, (TileEntityAccelerator)te);
+        }
+        else if(te instanceof TileEntityElectrolyzer) {
+            return new ContainerElectrolyzer(player.inventory, (TileEntityElectrolyzer)te);
         }
 
         return null;
@@ -26,6 +29,9 @@ public class LiquidUUGUIHandler implements IGuiHandler {
 
         if(te instanceof TileEntityAccelerator) {
             return new GUIAccelerator(player.inventory, (TileEntityAccelerator)te);
+        }
+        else if(te instanceof TileEntityElectrolyzer) {
+            return new GUIElectrolyzer(player.inventory, (TileEntityElectrolyzer)te);
         }
 
         return null;

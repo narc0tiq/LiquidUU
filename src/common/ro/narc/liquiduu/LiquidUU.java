@@ -17,7 +17,7 @@ import ro.narc.util.NarcLib;
         modid="LiquidUU",
         version="%conf:VERSION%",
         useMetadata=true,
-        dependencies="required-after:IC2;required-after:BuildCraft|Transport;required-after:BuildCraft|Energy;required-after:BuildCraft|Factory;after:Forestry;after:ThermalExpansion|Factory"
+        dependencies="required-after:IC2;required-after:BuildCraft|Transport;required-after:BuildCraft|Energy;required-after:BuildCraft|Factory;after:Forestry;after:ThermalExpansion;before:ThermalExpansion|Factory"
 )
 @NetworkMod(
         clientSideRequired = true,

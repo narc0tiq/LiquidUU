@@ -3,14 +3,20 @@ package ro.narc.liquiduu;
 import net.minecraftforge.common.ForgeDirection;
 
 public enum MachineFace {
-    AcceleratorFront (BlockGeneric.TI_ACCELERATOR_FRONT),
-    AcceleratorSide  (BlockGeneric.TI_ACCELERATOR_SIDE),
-    None             (BlockGeneric.TI_MACHINEFACE_NONE),
-    InputEU          (BlockGeneric.TI_MACHINEFACE_EU_IN),
-    OutputEU         (BlockGeneric.TI_MACHINEFACE_EU_OUT),
-    Water            (BlockGeneric.TI_MACHINEFACE_WATER),
-    ElectricWater    (BlockGeneric.TI_MACHINEFACE_EWATER),
-    ElectrolyzerFront(BlockGeneric.TI_ELECTROLYZER_FRONT);
+    AcceleratorFront          (0),
+    AcceleratorSide           (1),
+    ElectrolyzerIdle          (2),
+    ElectrolyzerElectrolyzing (3),
+    ElectrolyzerDelectrolyzing(4),
+    None                      (16),
+    InputEU                   (17),
+    OutputEU                  (18),
+    InputGeneric              (19),
+    OutputGeneric             (20),
+    Water                     (19),
+    ElectricWater             (21),
+    Broken                    (255);
+    // As of v0.8 this is how far we've gotten. Please don't reorder the entries above until v0.9.
 
     public final int textureIndex;
 

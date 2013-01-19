@@ -9,6 +9,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ICrafting;
 import net.minecraft.item.ItemStack;
 
 import ro.narc.util.TileEntityStateful;
@@ -18,7 +19,7 @@ public class TileEntityElectrolyzer extends TileEntityStateful implements IWrenc
     public short prevFacing = 3;
     public MachineFace[] faces = new MachineFace[] {
         MachineFace.OutputEU, MachineFace.InputEU,
-        MachineFace.None, MachineFace.ElectrolyzerFront,
+        MachineFace.None, MachineFace.ElectrolyzerIdle,
         MachineFace.Water, MachineFace.ElectricWater
     };
 
@@ -89,6 +90,29 @@ public class TileEntityElectrolyzer extends TileEntityStateful implements IWrenc
         return faces[side];
     }
 //}
+
+    public boolean isUseableByPlayer(EntityPlayer player) {
+        if(worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) != this) {
+            return false;
+        }
+
+        if(player.getDistance((double)xCoord + 0.5D, (double)yCoord + 0.5D, (double)zCoord + 0.5D) > 64.0D) {
+            return false;
+        }
+        return true;
+    }
+
+    public void getGUINetworkData(int key, int value) {
+        switch(key) {
+            default:
+                System.err.println("LiquidUU: Electrolyzer got unknown GUI network data for key " + key + ": " + value);
+                break;
+        }
+    }
+
+    public void sendGUINetworkData(ContainerElectrolyzer container, ICrafting iCrafting) {
+        //iCrafting.sendProgressBarUpdate(container, 0, tank.getLiquidAmount());
+    }
 
     @Override
     public void readFromNetwork(DataInput data) throws IOException {

@@ -110,8 +110,8 @@ public class ContainerAccelerator extends Container {
     }
 
     @Override
-    public void updateCraftingResults() {
-        super.updateCraftingResults();
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
 
         for(int i = 0; i < crafters.size(); i++) {
             accelerator.sendGUINetworkData(this, (ICrafting) crafters.get(i));

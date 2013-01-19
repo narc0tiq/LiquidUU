@@ -68,7 +68,7 @@ public class CommonProxy {
         initRecipes();
         initRefineryRecipes();
 
-        NetworkRegistry.instance().registerGuiHandler(LiquidUU.instance, new LiquidUUGUIHandler());
+        NetworkRegistry.instance().registerGuiHandler(LiquidUU.instance, new GUIHandler());
     }
 
     public void loadConfig(Configuration config) {
@@ -237,8 +237,12 @@ public class CommonProxy {
         addConversionRecipe(convenienceConversionUU, Block.lavaStill.blockID, 0, lavaConversion);
 
         addConversionRecipe(baseConversionUU, BuildCraftEnergy.oilStill.blockID, 0, oilConversion);
-        addConversionRecipe(convenienceConversionUU, BuildCraftEnergy.fuel.shiftedIndex, 0, fuelConversion);
+        addConversionRecipe(convenienceConversionUU, BuildCraftEnergy.fuel.itemID, 0, fuelConversion);
 
         addConversionRecipe(nonfuelConversionUU, Ic2Items.coolant.itemID, Ic2Items.coolant.getItemDamage(), coolantConversion);
+    }
+
+    public static boolean isDebugging() {
+        return LiquidUU.DEBUG;
     }
 }

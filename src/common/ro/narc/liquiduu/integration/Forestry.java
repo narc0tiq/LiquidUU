@@ -35,10 +35,11 @@ public class Forestry {
         return true;
     }
 
+    public static LiquidContainerData cannedUUData;
+
     @SuppressWarnings("unchecked")
     public static void initLiquidContainers(ItemStack canEmpty) {
-        LiquidContainerData cannedUUData = new LiquidContainerData(CommonProxy.liquidUULiquidStack,
-                CommonProxy.cannedUUItemStack, canEmpty);
+        cannedUUData = new LiquidContainerData(CommonProxy.liquidUULiquidStack, CommonProxy.cannedUUItemStack, canEmpty);
         LiquidContainerRegistry.registerLiquid(cannedUUData);
     }
 

@@ -19,19 +19,11 @@ import net.minecraft.world.World;
 import java.util.List;
 import java.util.Random;
 
+import ro.narc.util.TileEntityStateful;
+
 public class BlockGeneric extends BlockContainer {
     public static final byte DATA_ACCELERATOR  = 0;
     public static final byte DATA_ELECTROLYZER = 1;
-
-    public static final int TI_ACCELERATOR_FRONT  =   0;
-    public static final int TI_ACCELERATOR_SIDE   =   1;
-    public static final int TI_ELECTROLYZER_FRONT =  16;
-    public static final int TI_MACHINEFACE_EU_IN  =  17;
-    public static final int TI_MACHINEFACE_EU_OUT =  18;
-    public static final int TI_MACHINEFACE_WATER  =  19;
-    public static final int TI_MACHINEFACE_EWATER =  20;
-    public static final int TI_MACHINEFACE_NONE   =  21;
-    public static final int TI_BROKEN             = 255;
 
     public BlockGeneric(int id, Material material) {
         super(id, material);
@@ -87,7 +79,7 @@ public class BlockGeneric extends BlockContainer {
                 return mf.textureIndex;
             }
             else {
-                return TI_BROKEN;
+                return MachineFace.Broken.textureIndex;
             }
         }
 
@@ -102,12 +94,12 @@ public class BlockGeneric extends BlockContainer {
             return MachineFace.AcceleratorSide.textureIndex;
         }
         else if(data == DATA_ELECTROLYZER) {
-            if(side == 3) { return MachineFace.ElectrolyzerFront.textureIndex; }
+            if(side == 3) { return MachineFace.ElectrolyzerIdle.textureIndex; }
 
             return MachineFace.None.textureIndex;
         }
 
-        return TI_BROKEN;
+        return MachineFace.Broken.textureIndex;
     }
 
     @Override
@@ -165,7 +157,7 @@ public class BlockGeneric extends BlockContainer {
         }
 
         TileEntity te = world.getBlockTileEntity(x, y, z);
-        if(!(te instanceof TileEntityAccelerator)) {
+        if(!(te instanceof TileEntityStateful)) {
             return false;
         }
 
