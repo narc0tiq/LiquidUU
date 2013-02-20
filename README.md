@@ -19,12 +19,8 @@ The canonical place to get information on LiquidUU is
 To compile this mod, you will need a working MCP+Forge+MCPDeobfuscate install with
 [mcp_interface](https://github.com/FunnyMan3595/mcp_deobfuscate/tree/mcp_interface)
 plugged in. Instructions for that are in the README.txt files provided in both branches
-of the mcp_deobfuscate repository.
-
-As a special note for compiling with Minecraft 1.4.6, the current mcp_interface assumes
-that forge will create mcp/src/common, which is no longer the case as of recent Forges.
-To get around this, once you've compiled and obfuscated your MCP+Forge install, either
-symlink or rename mcp_dir/src/minecraft to src/common.
+of the mcp_deobfuscate repository. You may also like [the instructions I've written for 
+setting up MCP+Forge+mcp_deobfuscate projects to automatically build with Jenkins](http://www.narc.ro/building-with-mcpdeobfuscate).
 
 Note that, for a successful compile, you will need all of IC2, Buildcraft, Forestry, NEI,
 and Thermal Expansion to be present in your lib/ folder -- the simplest way to do this is
