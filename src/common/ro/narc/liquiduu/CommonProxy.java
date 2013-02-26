@@ -194,7 +194,7 @@ public class CommonProxy {
         LanguageRegistry.addName(cannedUUItemStack, "UU-Matter Can");
 
         LanguageRegistry.addName(machineBlock, "LiquidUU Machine");
-        LanguageRegistry.addName(accelerator, "Accelerator");
+        LanguageRegistry.addName(accelerator, "UUM Accelerator");
         LanguageRegistry.addName(electrolyzer, "Liquid Electrolyzer");
     }
 
