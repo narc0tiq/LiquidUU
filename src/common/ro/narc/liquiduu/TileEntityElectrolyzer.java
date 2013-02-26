@@ -7,10 +7,18 @@ import ic2.api.IWrenchable;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+
+import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.liquids.ILiquidTank;
+import net.minecraftforge.liquids.ITankContainer;
+import net.minecraftforge.liquids.LiquidStack;
 
 import ro.narc.util.TileEntityStateful;
 
@@ -90,6 +98,60 @@ public class TileEntityElectrolyzer extends TileEntityStateful implements IWrenc
         return faces[side];
     }
 //}
+
+    // Protected because getConnectedTanks always returns the same List<T>, which is unexpected behaviour for anyone using the output
+    protected List<ILiquidTank> workList = new ArrayList<ILiquidTank>();
+    protected List<ILiquidTank> getConnectedTanks(MachineFace connectingFace) {
+        workList.clear();
+
+        for(ForgeDirection dir: ForgeDirection.VALID_DIRECTIONS) {
+            if(getMachineFace(dir.ordinal()) != connectingFace) {
+                continue;
+            }
+
+            TileEntity te = worldObj.getBlockTileEntity(xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ);
+            if(!(te instanceof ITankContainer)) {
+                continue;
+            }
+
+            ILiquidTank[] arr = ((ITankContainer)te).getTanks(ForgeDirection.UNKNOWN);
+            for(int i = 0; i < arr.length; i++) {
+                if(!workList.contains(arr[i])) {
+                    workList.add(arr[i]);
+                }
+            }
+        }
+
+        return workList;
+    }
+
+    public LiquidStack getConnectedLiquid(LiquidStack desiredLiquid, MachineFace connectingFace) {
+        LiquidStack ls = desiredLiquid.copy(); ls.amount = 0;
+        List<ILiquidTank> liquidTanks = getConnectedTanks(connectingFace);
+
+        for(ILiquidTank tank: liquidTanks) {
+            LiquidStack tankLiquid = tank.getLiquid();
+            if(ls.isLiquidEqual(tankLiquid)) {
+                ls.amount += tankLiquid.amount;
+            }
+        }
+
+        return ls;
+    }
+
+    public int getConnectedLiquidCapacity(LiquidStack desiredLiquid, MachineFace connectingFace) {
+        int capacity = 0;
+        List<ILiquidTank> liquidTanks = getConnectedTanks(connectingFace);
+
+        for(ILiquidTank tank: liquidTanks) {
+            LiquidStack tankLiquid = tank.getLiquid();
+            if((tankLiquid == null) || desiredLiquid.isLiquidEqual(tankLiquid)) {
+                capacity += tank.getCapacity();
+            }
+        }
+
+        return capacity;
+    }
 
     public boolean isUseableByPlayer(EntityPlayer player) {
         if(worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) != this) {
