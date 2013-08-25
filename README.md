@@ -14,6 +14,42 @@ automated processing at a reasonable cost.
 The canonical place to get information on LiquidUU is
 [its thread on the IC2 forum](http://forum.industrial-craft.net/index.php?page=Thread&threadID=8269).
 
+## Retirement Notice ##
+
+As of 2013-08-26, LiquidUU is officially **retired**. My reasoning is as follows:
+
+   * IC<sup>2</sup> has been outwardly stagnant for more than half a year now.
+While this is changing now, I've since discovered that I don't really miss it
+-- I'm playing quite happily without IC<sup>2</sup>.
+
+   * Liquid UU-Matter (by which I mean the actual thing the mod creates) was
+never all that useful. I played some fairly long-term worlds with the mod
+available and never actually felt a need to liquify my UU-matter (mostly
+because I don't really produce much of the stuff in the first place). As
+sub-points to this:
+
+       * Liquid duplication is a cheap trick, and while the conversion ratios
+    have gotten some balance, being able to duplicate liquids is not exceptionally
+    useful. In the case of Forestry liquids, it's easy enough to just get more once
+    you've gotten some in the first place; in the case of oil, one either doesn't
+    use it, or doesn't want infinite quantities of it.
+
+       * Accelerating IC<sup>2</sup> machine operations is nice... but it's
+    also a lot more expensive than just waiting for processing to finish. Since
+    time is rarely such an important resource that one cannot wait for the
+    maceration of a stack of iron (or something) to finish, the accelerator becomes
+    a fairly useless toy to keep around.
+
+   * Liquid electrolysis, the last work-in-progress which was never finished,
+was aiming in the same general direction as liquid duplication -- storing EUs
+in liquid form is not exceptionally useful, given that you can always just make
+more of them, *and* that you can store large amounts easily enough in their
+natural form.
+
+If anyone is interested in taking over the maintenance of this mod (I'm not sure
+why you would), please feel free to [contact me](http://narc.ro/contact) in some
+way and I'll help you pick it up.
+
 ## Compiling ##
 
 To compile this mod, you will need a working MCP+Forge+MCPDeobfuscate install with
